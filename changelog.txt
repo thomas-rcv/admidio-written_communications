@@ -1,7 +1,7 @@
 /*************************************************************************************
  * Plugin Written communications documentation
  *
- * Copyright    : (c) 2004 - 2014 The Admidio Team
+ * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -12,7 +12,21 @@
 Changelog
 ==========
 
-13.04.2014	Version 1.0:	- released
-13.04.2014	Version 1.0.1: 	- Wrong spelling or role member class
-29.06.2014	Version 1.0.2: 	- Changed prefix of temporary file to "zip" because of troubleshooting in some installations
-				- Changed directory for temporary files to folder "templates/tempdir" in current root case of openbase_dir settings
+13.04.2014	Release 1.0:	- released.
+
+13.04.2014	Release 1.0.1: 	- [Bug] Wrong spelling or role member class.
+
+29.06.2014	Release 1.0.2: 	- [Bug] Changed prefix of temporary file to "zip" because of troubleshooting in some installations.
+				            - [Bug] Changed directory for temporary files to folder "templates/tempdir" in current root case of openbase_dir settings.
+
+18.08.2014  Release 1.1:    - [new] Control structure for access to the plugin for roles.
+                            - [new] Optional profile fields.
+                            - [new] Optional text fields.
+
+24.09.2015  Release 2.0:    - [new] Reworked customer surface to Admidio 3.0 with bootstrap
+                            - [new] Common improvement of code style.
+                            - [todo] Color style in CKEditor does not work with new CKeditor Script -> bugfix release in between the plugin **
+
+28.09.2015  Release 2.0.1:  - [Bug] Classes are not loaded if throwing message that valid entries are not found.
+                            - [Bug] File path for templates not set correctly.  
+                            - [internal] Reworked name convention to camel caps.                          

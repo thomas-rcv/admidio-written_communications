@@ -17,9 +17,9 @@
 $plg_wc_roleAccess = 0;
 
 // Array with defined roles for valid access to the plugin
-// This array is used if the parmater $plg_wc_roleAccess is set active to default "1"
-// Feel free to extend or define customer roles in the array. As default only the role Webmaster is allowed to use.
-// Example: $plg_wc_roleArray = array('Webmaster', 'Vorstand', '...', '...');
+// This array is used if the parmater $plg_wc_roleAccess is set active to option "1"
+// Feel free to extend or define own roles in the array. As default only the role "Webmaster" is allowed to use the plugin.
+// Example for further roles: $plg_wc_roleArray = array('Webmaster', 'Vorstand', '...', '...');
 
 $plg_wc_roleArray = array('Webmaster');
 

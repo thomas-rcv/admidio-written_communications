@@ -2,12 +2,12 @@
 /******************************************************************************
  * Plugin Written communications
  *
- * Copyright    : (c) 2004 - 2014 The Admidio Team
+ * Copyright    : (c) 2004 - 2015 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Version      : 1.1 
+ * Version      : 2.0 
  *
  *****************************************************************************/
 
@@ -22,12 +22,8 @@ if(!defined('PLUGIN_PATH'))
 }
 
 require_once('../../adm_program/system/common.php');
-require_once('../../adm_program/system/login_valid.php');
-require_once('../../adm_program/system/classes/form_elements.php');
-require_once('../../adm_program/system/classes/ckeditor_special.php');
 require_once('config.php');
-
-$plg_wc_access = false;
+require_once('../../adm_program/system/login_valid.php');
 
 // Check config parameters and define if not exists
 if(!isset($plg_wc_roleAccess))
@@ -47,7 +43,7 @@ if($gValidLogin)
     {
         $plg_wc_access = true;
     }
-    
+
     if(!$plg_wc_access)
     {
         if($plg_wc_roleAccess > 0 && count($plg_wc_roleArray) > 0)
@@ -58,26 +54,25 @@ if($gValidLogin)
                 {
                     $plg_wc_access = true;
                 }
-            }    
+            }
         }
         else
         {
-            throw new Exception('No roles defined in your configuration! Please check your parameters in config.php!');
+            throw new Exception('No roles defined in your configuration! Please check your parameters in the config.php!');
         }
     }
 }
 if(!$plg_wc_access)
 {
-    // Access for users only!
+    // Access for defined users only!
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     exit();
 }
+
 // Register plugin language files
 $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
-
 // Intitialize parameter
-$getHeadline  = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('PLG_WC_CREATE_WRITTEN_COMMUNICATIONS'),false);
-
+$getHeadline  = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PLG_WC_CREATE_WRITTEN_COMMUNICATIONS')),false);
 //* Check if own templates are available and set template path
 if(is_dir('../../adm_my_files/download/MSWord_Templates'))
 {
@@ -90,10 +85,10 @@ else
 
 // Define selectbox for membership conditon
 $selectBoxEntries = array(0 => $gL10n->get('LST_ACTIVE_MEMBERS'), 1 => $gL10n->get('LST_FORMER_MEMBERS'), 2 => $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
-
-// read templates and create selectbox
-$templateSelectionBox = '<select name="plg_wc_template" size="" style="width: 150px;">';
+// read templates and create template array
+$templateSelectionBox = array();
 $folder = opendir($dir);
+$i = 0;
 while($file = readdir($folder))
 {
     if ($file != "." && $file != "..") 
@@ -101,18 +96,18 @@ while($file = readdir($folder))
         // if docx template available assign to options
         if(preg_match('/.docx/', $file))
         {
-            $templateSelectionBox .= '<option value="'.$file.'">'.substr($file, 0, -5).'</option>';       
+            $templateSelectionBox[$file] = substr($file, 0, -5);       
         }
+        $i++;
     }
 }
 closedir($folder);
-$templateSelectionBox .= '</select>';
-
-$gLayout['header'] =  '
-<script type="text/javascript"><!--
-$(document).ready(function () {
+// create html page object
+$page = new HtmlPage($getHeadline);
+// Javascript for select boxes
+$page->addJavascript('$(document).ready(function () {
     $("#plg_wc_recipient_manual").hide();
-    $("input[name=recipient_mode]:checkbox").change(function (){
+    $("input[id=recipient_mode]:checkbox").change(function (){
         if ($(this).is(":checked"))
         {
             $("#plg_wc_recipient_role").hide();
@@ -125,7 +120,7 @@ $(document).ready(function () {
         }
     })
     $("#plg_wc_sender_manual").hide();
-    $("input[name=sender_user]:checkbox").change(function () {
+    $("input[id=sender_user]:checkbox").change(function () {
         if ($(this).is(":checked")) 
         {
             $("#plg_wc_sender_manual").hide("slow");
@@ -135,161 +130,54 @@ $(document).ready(function () {
             $("#plg_wc_sender_manual").show("slow");
         }
     })
-});
-//--></script>';
+    });', true);
 
-// Navigation starts here                        
+// Navigation starts here
 $gNavigation->addUrl(CURRENT_URL);
-$ckEditor = new CKEditorSpecial();
+// add back link to module menu
+$WC_Menu = $page->getMenu();
+$WC_Menu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+// show form
+$form = new HtmlForm('plg_wc_form', 'written_communications_functions.php', $page);
 
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+$form->openGroupBox('plg_wc_template_choice', $gL10n->get('PLG_WC_CHOOSE_TEMPLATE'));
+$form->addSelectBox('plg_wc_template', $gL10n->get('PLG_WC_CHOOSE_TEMPLATE'), $templateSelectionBox, array('property' => FIELD_REQUIRED));
+$form->closeGroupBox();
 
-// Start html output
-echo '
-<form action="written_communications_functions.php" method="post">
-    <div class="formLayout" id="plg_wc_create">
-        <div class="formHead">'. $getHeadline. '</div>
-        <div class="formBody">
-    		<div class="groupBox" id="plg_wc_settings">
-    			<div class="groupBoxHeadline" id="plg_wc_settings_head">
-    				<a class="iconShowHide" href="javascript:showHideBlock(\'plg_wc_settings_body\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-    				id="plg_wc_settings_BodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('PLG_WC_SELECTION').'
-    			</div>
-                    <div class="groupBoxBody" id="plg_wc_settings_body">
-        				<ul class="formFieldList">
-        					<li>
-        						<dl>
-        							<dt><label for="plg_wc_template">'.$gL10n->get('PLG_WC_CHOOSE_TEMPLATE').'</label></dt>
-        							<dd>
-        								'.$templateSelectionBox.'
-        							</dd>
-        						</dl>
-        					</li>
-        					<li>
-        					    <dd>
-        						<input type="checkbox" id="s1" name="sender_user" value="user" checked /> '.$gL10n->get('PLG_WC_ADDRESS_USER').'
-                                </dd>
-                                <dd>
-        						<input type="checkbox" id="r2" name="recipient_mode" value="single" /> '.$gL10n->get('PLG_WC_INDIVIDUAL_RECIPIENT').'
-        					    </dd>
-                            </li>
-                        </ul> 
-                    </div>
-            </div>
-            <div class="groupBox" id="plg_wc_sender_manual">
-    			<div class="groupBoxHeadline" id="plg_wc_sender_head">
-    				<a class="iconShowHide" href="javascript:showHideBlock(\'plg_wc_sender_body\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-    				id="plg_wc_sender_manual_BodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a> '.$gL10n->get('SYS_SENDER').'
-    			</div>
-                    <div class="groupBoxBody" id="plg_wc_sender_body">
-        				<ul class="formFieldList">
-                            <li>
-        						<dl>
-        							<dt><label for="plg_wc_sender_organization">'.$gL10n->get('SYS_ORGANIZATION').'</label></dt>
-                                         <dd>
-        						            <input type="text" name="plg_wc_sender_organization" value="" size="42" maxlength="50" />
-                                        </dd>
-                                    <dt><label for="plg_wc_sender_name">'.$gL10n->get('SYS_NAME').'</label></dt>
-                                         <dd>
-        						            <input type="text" name="plg_wc_sender_name" value="" size="42" maxlength="50" />
-                                        </dd>
-                                    <dt><label for="plg_wc_sender_address">'.$gL10n->get('SYS_ADDRESS').'</label></dt>
-                                         <dd>
-        						            <input type="text" name="plg_wc_sender_address" value="" size="42" maxlength="50" />
-                                        </dd>
-                                    <dt><label for="plg_wc_sender_city">'.$gL10n->get('SYS_CITY').'</label></dt>
-                                         <dd>
-                                            <span>
-        						                <input type="text" name="plg_wc_sender_postcode" value="" size="5" maxlength="50" />
-        						            </span>
-                                            <span style="margin-left: 14px;">
-        						                <input type="text" name="plg_wc_sender_city" value="" size="30" maxlength="50" />
-        						            </span>
-                                        </dd>
-                                </dl>        
-                           </li>
-                        </ul>
-                    </div>             
-            </div>
-            <div class="groupBox" id="plg_wc_recipient">
-    			<div class="groupBoxHeadline" id="plg_wc_recipient_head">
-    				<a class="iconShowHide" href="javascript:showHideBlock(\'plg_wc_recipient_body\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-    				id="plg_wc_recipient_BodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_RECIPIENT').'
-    			</div>
-                    <div class="groupBoxBody" id="plg_wc_recipient_body">
-                        <ul class="formFieldList" id="plg_wc_recipient_role">
-                            <li>
-        						<dl>
-        							<dt><label for="plg_wc_recipient_role">'.$gL10n->get('SYS_ROLE').'</label></dt>
-        							    <dd>
-        							        <span>
-        						                '.FormElements::generateRoleSelectBox(0, 'role_select').'
-        						            </span>
-        						            <span style="margin-left: 15;">
-        						                '.FormElements::generateDynamicSelectBox($selectBoxEntries, 0, 'show_members').'
-        						            </span>
-                                        </dd>
-                                </dl>
-                            </li>
-                        </ul>
-                        <ul class="formFieldList" id="plg_wc_recipient_manual">
-                            <li>
-        						<dl>
-        							<dt><label for="plg_wc_recipient_organization">'.$gL10n->get('SYS_ORGANIZATION').'</label></dt>
-                                         <dd>
-        						            <input type="text" name="plg_wc_recipient_organization" value="" size="42" maxlength="50" />
-                                        </dd>
-                                    <dt><label for="plg_wc_recipient_name">'.$gL10n->get('SYS_NAME').'</label></dt>
-                                         <dd>
-        						            <input type="text" name="plg_wc_recipient_name" value="" size="42" maxlength="50" />
-                                        </dd>
-                                    <dt><label for="plg_wc_recipient_address">'.$gL10n->get('SYS_ADDRESS').'</label></dt>
-                                         <dd>
-        						            <input type="text" name="plg_wc_recipient_address" value="" size="42" maxlength="50" />
-                                        </dd>
-                                    <dt><label for="plg_wc_recipient_city">'.$gL10n->get('SYS_CITY').'</label></dt>
-                                         <dd>
-                                            <span>
-        						                <input type="text" name="plg_wc_recipient_postcode" value="" size="5" maxlength="50" />
-        						            </span>
-                                            <span style="margin-left: 14px;">
-        						                <input type="text" name="plg_wc_recipient_city" value="" size="30" maxlength="50" />
-        						            </span>
-                                        </dd>
-                                </dl>
-                           </li>
-                        </ul>
-                    </div>
-            </div>
-            <div class="groupBox" id="plg_wc_subject">
-                <div class="groupBoxHeadline" id="plg_wc_subject_head">
-    				<a class="iconShowHide" href="javascript:showHideBlock(\'plg_wc_subject_body\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-    				id="plg_wc_subject_BodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('MAI_SUBJECT').'
-    		    </div>
-                <div class="groupBoxBody" id="plg_wc_subject_body">
-    				<ul class="formFieldList">
-    					<li>
-                            <input type="text" id="plg_wc_subject" name="plg_wc_subject" style="width: 99%;" maxlength="100" value="" />
-                        </li>
-    				</ul>
-                </div>
-            </div>
-            <div class="groupBox" id="plg_wc_description">
-    			<div class="groupBoxHeadline" id="plg_wc_description_head">
-    				<a class="iconShowHide" href="javascript:showHideBlock(\'plg_wc_DescriptionBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-    				id="plg_wc_description_BodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_DESCRIPTION').'
-    			</div>
-                <div class="groupBoxBody" id="plg_wc_DescriptionBody">
-                    <ul class="formFieldList">
-                        <li>'.$ckEditor->createEditor('plugin_CKEditor', '', 'AdmidioPlugin_WC').'</li>
-                    </ul>
-                </div>
-            </div> 
-        </div>
-        <div class="formSubmit">
-            <button type="submit" name="submit"><img src="'.THEME_PATH.'/icons/page_white_word.png" alt="" title="" />'.$gL10n->get('PLG_WC_DOWNLOAD_DOCUMENT').'</button>
-        </div>                                
-    </div>
-</form>';
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+$form->openGroupBox('plg_wc_selection', $gL10n->get('PLG_WC_SELECTION'));
+$form->addCheckbox('sender_user', $gL10n->get('PLG_WC_ADDRESS_USER'), 1);
+$form->addCheckbox('recipient_mode', $gL10n->get('PLG_WC_INDIVIDUAL_RECIPIENT'), 'recipient_mode');
+$form->closeGroupBox();
+
+$form->openGroupBox('plg_wc_sender_manual', $gL10n->get('SYS_SENDER'));
+$form->addInput('plg_wc_sender_organization', $gL10n->get('SYS_ORGANIZATION'), '');
+$form->addInput('plg_wc_sender_name', $gL10n->get('SYS_NAME'), '');
+$form->addInput('plg_wc_sender_address', $gL10n->get('SYS_ADDRESS'), '');
+$form->addInput('plg_wc_sender_postcode', $gL10n->get('SYS_POSTCODE'), '');
+$form->addInput('plg_wc_sender_city', $gL10n->get('SYS_CITY'), '');
+$form->closeGroupBox();
+
+$form->openGroupBox('plg_wc_recipient_role', $gL10n->get('SYS_ROLE'));
+$form->addStaticControl('plg_wc_recipient_role', $gL10n->get('SYS_ROLE'), FormElements::generateRoleSelectBox(0, 'role_select'));
+$form->addStaticControl('plg_wc_recipient_role', $gL10n->get('SYS_MEMBER'), FormElements::generateDynamicSelectBox($selectBoxEntries, 0, 'show_members'));
+$form->closeGroupBox();
+
+$form->openGroupBox('plg_wc_recipient_manual', $gL10n->get('SYS_RECIPIENT'));
+$form->addInput('plg_wc_recipient_organization', $gL10n->get('SYS_ORGANIZATION'), '');
+$form->addInput('plg_wc_recipient_name', $gL10n->get('SYS_NAME'), '');
+$form->addInput('plg_wc_recipient_address', $gL10n->get('SYS_ADDRESS'), '');
+$form->addInput('plg_wc_recipient_postcode', $gL10n->get('SYS_POSTCODE'), '');
+$form->addInput('plg_wc_recipient_city', $gL10n->get('SYS_CITY'), '');
+$form->closeGroupBox();
+// add editor for message
+$form->openGroupBox('plg_wc_description', $gL10n->get('SYS_TEXT'));
+$form->addInput('plg_wc_subject', $gL10n->get('MAI_SUBJECT'), '');
+$form->addEditor('plugin_CKEditor', null, '', array('toolbar' => 'AdmidioPlugin_WC'));
+$form->closeGroupBox();
+ // add submit button
+$form->addSubmitButton('btn_send', $gL10n->get('PLG_WC_DOWNLOAD_DOCUMENT'), array('icon' => THEME_PATH.'/icons/page_white_word.png'));
+// add form to html page
+$page->addHtml($form->show(false));
+// show page
+$page->show();
 ?>
