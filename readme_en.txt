@@ -1,0 +1,90 @@
+/*************************************************************************************
+ * Plugin Written communications documentation
+ *
+ * Copyright    : (c) 2004 - 2014 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * Author       : Thomas-RCV
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * Version      : 1.0 beta
+ *
+ ************************************************************************************/
+ 
+ This Plugi generates letters and written communicatins. Based on a *.docx template with placeholders,
+ the final document will be created and the download starts automatically.
+ The document can be used with specific software supporting open xml format (docx) .
+ Software MS Office, Open Office and Libre Office.
+ 
+ 
+
+ 1. System Requirements
+ ----------------------
+ 
+ - Admidio Version 2.4.4 odr higher
+ 
+ 
+
+
+ 2. Installation
+ ---------------
+ 
+ - no installation nescessary. 
+ - Copy the extracted plugi folder in adm_plugins.
+ - Add the Link to the plugin to the Admidio Menue in the used theme.
+ 
+  
+  
+   Example:
+   ---------
+   Add the link to the plugin at the end of the Admidio menue in the script "my_body_bottom.php" 
+   
+   
+   
+   $moduleMenu->addItem('written_communications', '/adm_plugins/written_communications/written_communications.php',
+        									'Brief erstellen', '/icons/page_white_word.png');
+                                            
+   
+   
+   Access to the plugin can be assigned to roles. Please use the Admidio function hasRole()
+   
+   Example for only access for role Webmaster and chairman of the organization:
+   ----------------------------------------------------------------------------
+   
+   if(hasRole('Webmaster', 'Chairman')
+   {
+        $moduleMenu->addItem('written_communications', '/adm_plugins/written_communications/written_communications.php',
+        									'Brief erstellen', '/icons/page_white_word.png');
+   } 
+   
+   
+ 
+ 
+ 
+ 3. Updates
+ ----------
+ 
+ - All scripts and folders are replaced if an update is released.
+ 
+ 
+
+
+ 4. Creating own templates:
+ ---------------------------------
+
+Creating an using own templates, the plugin is connected to the Admdido download module.
+It is not recommended using own templates in the demo template directory of the plugin.
+Caused by an update the folder may be replaced, too.  
+
+ - Create a folder "MSWord_Templates" in the download module. If exists the plugin switches the path to it automatically.
+ - Own Templates can be provided in this directory using the upload sequence. Also FTP transmitting is possible.
+   The templates must have the *.docx format!
+   Old formats like *.doc and also template formats are not supported!
+ - Used placeholders can be seen in the demo templates demo_de.docx und demo_en.docx int the folder "templates" of the plugin.
+
+ 
+   
+
+
+
+    
+    
+   

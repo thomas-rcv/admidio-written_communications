@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language id="en">
+    <version id="1.0" translator="Thomas-RCV">
+        <text id="PLG_WC_ADDRESS_USER" development="new" translation="todo">Use my address as sender</text>
+        <text id="PLG_WC_CREATE_WRITTEN_COMMUNICATIONS" development="new" translation="todo">Create written communication</text>
+        <text id="PLG_WC_CHOOSE_TEMPLATE" development="new" translation="todo">Choose template</text>
+        <text id="PLG_WC_DOWNLOAD_DOCUMENT" development="new" translation="todo">Download document</text>
+        <text id="PLG_WC_FILENAME" development="new" translation="todo">Correspondence</text>
+        <text id="PLG_WC_SELECTION" development="new" translation="todo">Selection</text>
+        <text id="PLG_WC_INDIVIDUAL_RECIPIENT" development="new" translation="todo">Individual recipient</text>
+    </version>
+</language>
