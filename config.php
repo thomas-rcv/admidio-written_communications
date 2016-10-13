@@ -2,11 +2,11 @@
 /******************************************************************************
  * Configuration file for the  Admidio-Plugin Written Cummuincations
  *
- * Copyright    : (c) 2004 - 2014 The Admidio Team
+ * Copyright    : (c) 2004 - 2016 The Admidio Team
  * Author       : Thomas-RCV
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- * Version      : 1.1
+ * Version      : 3.0
  * 
  *****************************************************************************/
 

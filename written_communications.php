@@ -2,12 +2,12 @@
 /******************************************************************************
  * Plugin Written communications
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
+ * Copyright    : (c) 2004 - 2016 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- *
- * Version      : 2.0 
+ * Version      : 3.0
+ * Required     : Admidio Version 3.1
  *
  *****************************************************************************/
 
@@ -73,13 +73,14 @@ if(!$plg_wc_access)
 $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 // Intitialize parameter
 $getHeadline  = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PLG_WC_CREATE_WRITTEN_COMMUNICATIONS')),false);
+$getActiveRole  = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
 //* Check if own templates are available and set template path
 if(is_dir('../../adm_my_files/download/MSWord_Templates'))
 {
     $dir = '../../adm_my_files/download/MSWord_Templates';
 }
 else
-{    
+{
     $dir = 'templates';
 }
 
@@ -91,12 +92,12 @@ $folder = opendir($dir);
 $i = 0;
 while($file = readdir($folder))
 {
-    if ($file != "." && $file != "..") 
-    { 
+    if ($file != "." && $file != "..")
+    {
         // if docx template available assign to options
         if(preg_match('/.docx/', $file))
         {
-            $templateSelectionBox[$file] = substr($file, 0, -5);       
+            $templateSelectionBox[$file] = substr($file, 0, -5);
         }
         $i++;
     }
@@ -121,7 +122,7 @@ $page->addJavascript('$(document).ready(function () {
     })
     $("#plg_wc_sender_manual").hide();
     $("input[id=sender_user]:checkbox").change(function () {
-        if ($(this).is(":checked")) 
+        if ($(this).is(":checked"))
         {
             $("#plg_wc_sender_manual").hide("slow");
         }
@@ -146,7 +147,7 @@ $form->closeGroupBox();
 
 $form->openGroupBox('plg_wc_selection', $gL10n->get('PLG_WC_SELECTION'));
 $form->addCheckbox('sender_user', $gL10n->get('PLG_WC_ADDRESS_USER'), 1);
-$form->addCheckbox('recipient_mode', $gL10n->get('PLG_WC_INDIVIDUAL_RECIPIENT'), 'recipient_mode');
+$form->addCheckbox('recipient_mode', $gL10n->get('PLG_WC_INDIVIDUAL_RECIPIENT'));
 $form->closeGroupBox();
 
 $form->openGroupBox('plg_wc_sender_manual', $gL10n->get('SYS_SENDER'));
@@ -158,8 +159,21 @@ $form->addInput('plg_wc_sender_city', $gL10n->get('SYS_CITY'), '');
 $form->closeGroupBox();
 
 $form->openGroupBox('plg_wc_recipient_role', $gL10n->get('SYS_ROLE'));
-$form->addStaticControl('plg_wc_recipient_role', $gL10n->get('SYS_ROLE'), FormElements::generateRoleSelectBox(0, 'role_select'));
-$form->addStaticControl('plg_wc_recipient_role', $gL10n->get('SYS_MEMBER'), FormElements::generateDynamicSelectBox($selectBoxEntries, 0, 'show_members'));
+// show all roles where the user has the right to see them
+$sql = 'SELECT rol_id, rol_name, cat_name
+          FROM '.TBL_ROLES.'
+    INNER JOIN '.TBL_CATEGORIES.'
+            ON cat_id = rol_cat_id
+         WHERE rol_valid   = '.$getActiveRole.'
+           AND rol_visible = 1
+           AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+               OR cat_org_id IS NULL )
+      ORDER BY cat_sequence, rol_name';
+$form->addSelectBoxFromSql('role_select', $gL10n->get('SYS_ROLE'), $gDb, $sql,
+    array('property' => FIELD_REQUIRED, 'defaultValue' => 0, 'multiselect' => false));
+$showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
+$form->addSelectBox('show_members', $gL10n->get('LST_MEMBER_STATUS'), $showMembersSelection,
+    array('property' => FIELD_REQUIRED, 'defaultValue' => $selectBoxEntries, 'showContextDependentFirstEntry' => false));
 $form->closeGroupBox();
 
 $form->openGroupBox('plg_wc_recipient_manual', $gL10n->get('SYS_RECIPIENT'));

@@ -1,11 +1,11 @@
 /*************************************************************************************
  * Plugin Written communications documentation
  *
- * Copyright    : (c) 2004 - 2014 The Admidio Team
+ * Copyright    : (c) 2004 - 2016 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- * Version      : 1.0 beta
+ * Version      : 3.0
  *
  ************************************************************************************/
  

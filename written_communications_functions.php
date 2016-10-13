@@ -2,12 +2,12 @@
 /*************************************************************************************
  * Plugin Written communications functions
  *
- * Copyright    : (c) 2004 - 2015 The Admidio Team
+ * Copyright    : (c) 2004 - 2016 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- * Version      : 2.0
- * Required     : Admidio Version 2.4.4 or higher
+ * Version      : 3.0
+ * Required     : Admidio Version 3.1 
  *
  * Parameters:
  *
@@ -122,26 +122,23 @@ if($gCurrentUser->getValue('usr_id') == 0)
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     exit();
 }
-
 // Initialize and check the parameter
-
 $getCommunication           = admFuncVariableIsValid($_POST, 'plugin_CKEditor', 'html', array('defaultValue' => 'no Text'));
 $getRecipientMode           = admFuncVariableIsValid($_POST, 'recipient_mode', 'string', array('defaultValue' => 'Role'));
 $getRecipientOrganization   = admFuncVariableIsValid($_POST, 'plg_wc_recipient_organization', 'string', array('defaultValue' => ''));
 $getRecipientName           = admFuncVariableIsValid($_POST, 'plg_wc_recipient_name', 'string', array('defaultValue' => ''));
 $getRecipientAddress        = admFuncVariableIsValid($_POST, 'plg_wc_recipient_address', 'string', array('defaultValue' => ''));
-$getRecipientPostcode       = admFuncVariableIsValid($_POST, 'plg_wc_recipient_postcode', 'numeric', array('defaultValue' => ''));
+$getRecipientPostcode       = admFuncVariableIsValid($_POST, 'plg_wc_recipient_postcode', 'string', array('defaultValue' => ''));
 $getRecipientCity           = admFuncVariableIsValid($_POST, 'plg_wc_recipient_city', 'string', array('defaultValue' => ''));
-$getRoleSelect              = admFuncVariableIsValid($_POST, 'role_select', 'numeric', array('defaultValue' => ''));
+$getRoleSelect              = admFuncVariableIsValid($_POST, 'role_select', 'string');
 $getSenderOrganization      = admFuncVariableIsValid($_POST, 'plg_wc_sender_organization', 'string', array('defaultValue' => ''));
 $getSenderName              = admFuncVariableIsValid($_POST, 'plg_wc_sender_name', 'string', array('defaultValue' => ''));
 $getSenderAddress           = admFuncVariableIsValid($_POST, 'plg_wc_sender_address', 'string', array('defaultValue' => ''));
-$getSenderPostcode          = admFuncVariableIsValid($_POST, 'plg_wc_sender_postcode', 'numeric', array('defaultValue' => ''));
+$getSenderPostcode          = admFuncVariableIsValid($_POST, 'plg_wc_sender_postcode', 'string', array('defaultValue' => ''));
 $getSenderCity              = admFuncVariableIsValid($_POST, 'plg_wc_sender_city', 'string', array('defaultValue' => ''));
-$getShowMembers             = admFuncVariableIsValid($_POST, 'show_members', 'numeric', array('defaultValue' => ''));
+$getShowMembers             = admFuncVariableIsValid($_POST, 'show_members', 'string', array('defaultValue' => ''));
 $getSubject                 = admFuncVariableIsValid($_POST, 'plg_wc_subject', 'string', array('defaultValue' => ''));
 $getTemplate                = admFuncVariableIsValid($_POST, 'plg_wc_template', 'string', array('defaultValue' => ''));
-
 // Define sender address
 if(isset($_POST['sender_user']))
 {
@@ -215,7 +212,9 @@ else
 $template = $templatePath. '/' .$getTemplate;
 
 // Get current date
-$objDate = new DateTimeExtended(DATE_NOW, 'Y-m-d', 'date');
+$objDate = new DateTime(DATE_NOW);
+$objDate->format('Y-m-d');
+
 $dateSystemFormat = $objDate->format($gPreferences['system_date']);
 // Define file name
 $filename = $templatePath. '/' .$gL10n->get('PLG_WC_FILENAME').'_'.$dateSystemFormat.'.docx';
