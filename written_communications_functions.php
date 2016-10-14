@@ -62,9 +62,16 @@ function assignHtmlColorAttributes($htmlString, $offset = 0)
              if($offset >= $i)
              {
                  $i = $offset;
-                 preg_match('/<span style="color:(.*?);">/s', substr($htmlString, $pos), $output);
+                 preg_match('/\<span style="color:(.*?)"\>/', substr($htmlString, $pos), $output);
                  // Convert in a class attribute with value of the color.
-                 $htmlString = preg_replace($output[0], 'span class="'.$output[1].'"', $htmlString);
+                 $htmlString = preg_replace_callback( $output[0],
+                  
+                                                        function() use ($output)
+                                                        {   
+                                                            return 'span class="'.$output[1].'"';
+                                                        },
+                                                        $htmlString);
+                                                        
                  // Define class attribute for color in state array
                  $initial_state['style_sheet']['classes'][$output[1]] = array('color' => strtoupper(substr($output[1],1)));
              }
