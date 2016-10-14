@@ -32,4 +32,5 @@ Changelog
                             - [internal] Reworked name convention to camel caps.
                   
 12.10.2016  Release 3.0:    - Compatibility with Admidio 3.1
-                            - PHP7 ready                          
+                            - PHP7 ready
+                            - [new] Language "de_sie"                           
