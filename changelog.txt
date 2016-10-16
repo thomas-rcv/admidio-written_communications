@@ -33,4 +33,5 @@ Changelog
                   
 12.10.2016  Release 3.0:    - Compatibility with Admidio 3.1
                             - PHP7 ready
-                            - [new] Language "de_sie"                           
+                            - [new] Language "de_sie"
+                            - [rework] text color style assignment                          

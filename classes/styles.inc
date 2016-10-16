@@ -121,52 +121,52 @@ function readStyleArray() {
       'vertical-align: right' => array (
         'align' => 'right',
       ),
-      'font-size: 8pt' => array (
+      'font-size: 8px' => array (
         'size' => 8,
       ),
-      'font-size: 9pt' => array (
+      'font-size: 9px' => array (
         'size' => 9,
       ),
-      'font-size: 10pt' => array (
+      'font-size: 10px' => array (
         'size' => 10,
       ),
-      'font-size: 11pt' => array (
+      'font-size: 11px' => array (
         'size' => 11,
       ),
-      'font-size: 12pt' => array (
+      'font-size: 12px' => array (
         'size' => 12,
       ),
-      'font-size: 14pt' => array (
+      'font-size: 14px' => array (
         'size' => 14,
       ),
-      'font-size: 16pt' => array (
+      'font-size: 16px' => array (
         'size' => 16,
       ),
-      'font-size: 18pt' => array (
+      'font-size: 18px' => array (
         'size' => 18,
       ),
-      'font-size: 20pt' => array (
+      'font-size: 20px' => array (
         'size' => 20,
       ),
-      'font-size: 22pt' => array (
+      'font-size: 22px' => array (
         'size' => 22,
       ),
-      'font-size: 24pt' => array (
+      'font-size: 24px' => array (
         'size' => 24,
       ),
-      'font-size: 26pt' => array (
+      'font-size: 26px' => array (
         'size' => 26,
       ),
-      'font-size: 28pt' => array (
+      'font-size: 28px' => array (
         'size' => 28,
       ),
-      'font-size: 36pt' => array (
+      'font-size: 36px' => array (
         'size' => 36,
       ),
-      'font-size: 48pt' => array (
+      'font-size: 48px' => array (
         'size' => 48,
       ),
-      'font-size: 72pt' => array (
+      'font-size: 72px' => array (
         'size' => 72,
       ),
     );
