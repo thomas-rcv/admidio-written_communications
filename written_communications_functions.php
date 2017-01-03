@@ -207,9 +207,9 @@ else
 }
 
 // Check if own templates are available and set template path
-if(is_dir('../../adm_my_files/download/MSWord_Templates'))
+if(is_dir('../../adm_my_files/download_clb/MSWord_Templates'))
 {
-    $templatePath = '../../adm_my_files/download/MSWord_Templates';
+    $templatePath = '../../adm_my_files/download_clb/MSWord_Templates';
 }
 else
 {
