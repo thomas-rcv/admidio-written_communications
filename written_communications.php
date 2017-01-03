@@ -75,9 +75,9 @@ $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 $getHeadline  = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PLG_WC_CREATE_WRITTEN_COMMUNICATIONS')),false);
 $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
 //* Check if own templates are available and set template path
-if(is_dir('../../adm_my_files/download/MSWord_Templates'))
+if(is_dir('../../adm_my_files/download_clb/MSWord_Templates'))
 {
-    $dir = '../../adm_my_files/download/MSWord_Templates';
+    $dir = '../../adm_my_files/download_clb/MSWord_Templates';
 }
 else
 {
