@@ -1,11 +1,11 @@
 /*************************************************************************************
  * Plugin Written communications documentation
  *
- * Copyright    : (c) 2004 - 2016 The Admidio Team
+ * Copyright    : (c) 2004 - 2017 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- * Version      : 3.0
+ * Version      : 3.1
  *
  ************************************************************************************/
  
@@ -63,6 +63,10 @@
  ----------
  
  - Bei einem neuen Release werden die alle Dateien und Ordner durch neuere Versionsscripte ersetzt.
+ 
+ INFO: Seit der Admidio Version 3.2 wurde die Rolle "Webmaster" in "Administrator" umbenannt und die alte Bezeichnung wird künftig entfernt.
+       Deshalb aktualisiere bitte deine config.php des Plugins und ändere bitte die Rollenüberwachung in $plg_wc_roleArray = array('Administrator');, sofern du diese verwendest, um Programmfehler zu vermeiden.
+       
  
  
 

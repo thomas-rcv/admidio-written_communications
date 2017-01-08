@@ -2,11 +2,11 @@
 /******************************************************************************
  * Configuration file for the  Admidio-Plugin Written Cummuincations
  *
- * Copyright    : (c) 2004 - 2016 The Admidio Team
+ * Copyright    : (c) 2004 - 2017 The Admidio Team
  * Author       : Thomas-RCV
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- * Version      : 3.0
+ * Version      : 3.1
  * 
  *****************************************************************************/
 
@@ -21,7 +21,7 @@ $plg_wc_roleAccess = 0;
 // Feel free to extend or define own roles in the array. As default only the role "Webmaster" is allowed to use the plugin.
 // Example for further roles: $plg_wc_roleArray = array('Webmaster', 'Vorstand', '...', '...');
 
-$plg_wc_roleArray = array('Webmaster');
+$plg_wc_roleArray = array('Administrator');
 
 // This array can be used to define additional profile fields for the template engine.
 // Customizable key/value pairs can be defined according to your database definitions of the profile fields.

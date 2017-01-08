@@ -1,7 +1,7 @@
 /*************************************************************************************
  * Plugin Written communications documentation
  *
- * Copyright    : (c) 2004 - 2016 The Admidio Team
+ * Copyright    : (c) 2004 - 2017 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -34,4 +34,8 @@ Changelog
 12.10.2016  Release 3.0:    - Compatibility with Admidio 3.1
                             - PHP7 ready
                             - [new] Language "de_sie"
-                            - [rework] text color style assignment                          
+                            - [rework] text color style assignment
+                            
+08.01.2017  Release 3.1:    - Compatibility with Admidio 3.2
+                            - changed folder path of the user tamplates to new organization folder names in the Download module.
+                            - renamed "Webmaster" to "Administrator" in the config file ( $plg_wc_roleArray = array('Administrator'); ).                      
