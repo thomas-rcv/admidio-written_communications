@@ -49,7 +49,7 @@
    Beispiel für Zugriff nur für den Webmaster und den Vorstand:
    ------------------------------------------------------------
    
-   if(hasRole('Webmaster', 'Vorstand')
+   if(hasRole('Administrator', 'Vorstand')
    {
         $moduleMenu->addItem('written_communications', '/adm_plugins/written_communications/written_communications.php',
         									'Brief erstellen', '/icons/page_white_word.png');

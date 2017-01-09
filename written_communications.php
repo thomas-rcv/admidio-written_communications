@@ -33,7 +33,7 @@ if(!isset($plg_wc_roleAccess))
 }
 if(!isset($plg_wc_roleArray))
 {
-    $plg_wc_roleArray = array('Webmaster');
+    $plg_wc_roleArray = array('Administrator');
 }
 
 // Check current user for valid access to plugin

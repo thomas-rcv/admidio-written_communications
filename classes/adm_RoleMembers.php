@@ -191,7 +191,7 @@ class RoleMembers
                 ORDER BY last_name, first_name '.$this->limit;
         
         $resultUser = $this->db->query($sql);
-        while($row = $this->db->fetch_array($resultUser))
+        while($row = $resultUser->fetch())
         {
             // Read role members of the current role
             if($row['member_this_role'] > 0)

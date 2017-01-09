@@ -49,7 +49,7 @@
    Example for only access for role Webmaster and chairman of the organization:
    ----------------------------------------------------------------------------
    
-   if(hasRole('Webmaster', 'Chairman')
+   if(hasRole('Administrator', 'Chairman')
    {
         $moduleMenu->addItem('written_communications', '/adm_plugins/written_communications/written_communications.php',
         									'Brief erstellen', '/icons/page_white_word.png');
