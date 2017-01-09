@@ -45,6 +45,7 @@ require_once('classes/htmltodocx_converter/h2d_htmlconverter.php');
 require_once('classes/adm_RoleMembers.php');
 require_once('classes/styles.inc');
 require_once('config.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
 
 // Function to pick up all html color attributes in current string and convert it in a class attributes with value of the color.
 // It also assigns the created class attributes in the replaced string based on the color style to the style array on the fly.
@@ -207,14 +208,16 @@ else
 }
 
 // Check if own templates are available and set template path
-if(is_dir('../../adm_my_files/download/MSWord_Templates'))
+if(is_dir('../../adm_my_files/' . TableFolder::getRootFolderName() . '/MSWord_Templates'))
 {
-    $templatePath = '../../adm_my_files/download/MSWord_Templates';
+    $templatePath = '../../adm_my_files/' . TableFolder::getRootFolderName() . '/MSWord_Templates';
 }
 else
 {
     $templatePath = 'templates';
 }
+$gLogger->info('Written Communications: Customer template folder found');
+$gLogger->info('Written Communications: Template path set to :' .$templatePath. '');
 // Set path
 $template = $templatePath. '/' .$getTemplate;
 
@@ -279,6 +282,7 @@ $description_output = '</w:t></w:r>'.$output[1].'<w:p><w:r><w:t>';
 unlink($tmpFileLocation);
 // Load main template
 $document = $phpwordObject->loadTemplate($template);
+$gLogger->info('Written Communications: Template loaded :' .$template. '');
 // Count number of Recipients
 $numRecipient = count($arrRecipient);
 // Loop Recipient array and create a new document for each Recipient
