@@ -165,14 +165,14 @@ $sql = 'SELECT rol_id, rol_name, cat_name
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
          WHERE rol_valid   = '.$getActiveRole.'
-           AND rol_profile = 1
+           AND rol_visible = 1
            AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL )
       ORDER BY cat_sequence, rol_name';
 $form->addSelectBoxFromSql('role_select', $gL10n->get('SYS_ROLE'), $gDb, $sql,
     array('property' => FIELD_REQUIRED, 'defaultValue' => 0, 'multiselect' => false));
 $showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
-$form->addSelectBox('show_members', $gL10n->get('LST_CONFIGURATION'), $showMembersSelection,
+$form->addSelectBox('show_members', $gL10n->get('LST_MEMBER_STATUS'), $showMembersSelection,
     array('property' => FIELD_REQUIRED, 'defaultValue' => $selectBoxEntries, 'showContextDependentFirstEntry' => false));
 $form->closeGroupBox();
 
