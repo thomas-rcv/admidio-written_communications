@@ -2,12 +2,12 @@
 /*************************************************************************************
  * Plugin Written communications functions
  *
- * Copyright    : (c) 2004 - 2017 The Admidio Team
+ * Copyright    : (c) 2004 - 2018 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- * Version      : 3.1
- * Required     : Admidio Version 3.1 
+ * Version      : 3.2
+ * Required     : Admidio Version 3.3
  *
  * Parameters:
  *
@@ -32,19 +32,27 @@
  *
  ************************************************************************************/
 
-require_once('../../adm_program/system/common.php'); 
-require_once('../../adm_program/system/classes/datetimeextended.php');
-require_once('../../adm_program/system/classes/htmlform.php');
-require_once('../../adm_program/system/classes/htmlnavbar.php');
-require_once('../../adm_program/system/classes/htmlpage.php');
-require_once('../../adm_program/system/classes/menu.php');
-require_once('../../adm_program/system/classes/tablemessage.php');
-require_once('classes/PHPWord.php');
-require_once('classes/simplehtmldom/simple_html_dom.php');
-require_once('classes/htmltodocx_converter/h2d_htmlconverter.php');
-require_once('classes/adm_RoleMembers.php');
-require_once('classes/styles.inc');
-require_once('config.php');
+ // create path to plugin
+$plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
+
+if(!defined('PLUGIN_PATH'))
+{
+    define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
+}
+
+require_once(PLUGIN_PATH . '../../adm_program/system/common.php');
+require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/datetimeextended.php');
+require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/htmlform.php');
+require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/htmlnavbar.php');
+require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/htmlpage.php');
+require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/menu.php');
+require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/tablemessage.php');
+require_once(__DIR__ . '/classes/PHPWord.php');
+require_once(__DIR__ . '/classes/simplehtmldom/simple_html_dom.php');
+require_once(__DIR__ . '/classes/htmltodocx_converter/h2d_htmlconverter.php');
+require_once(__DIR__ . '/classes/adm_RoleMembers.php');
+require_once(__DIR__ . '/classes/styles.inc');
+require_once(__DIR__ . '/config.php');
 require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
 
 // Function to pick up all html color attributes in current string and convert it in a class attributes with value of the color.
@@ -208,9 +216,9 @@ else
 }
 
 // Check if own templates are available and set template path
-if(is_dir('../../adm_my_files/' . TableFolder::getRootFolderName() . '/MSWord_Templates'))
+if(is_dir(ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName() . '/MSWord_Templates'))
 {
-    $templatePath = '../../adm_my_files/' . TableFolder::getRootFolderName() . '/MSWord_Templates';
+    $templatePath = ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName() . '/MSWord_Templates';
 }
 else
 {
@@ -264,7 +272,7 @@ htmltodocx_insert_html($section, $arrHtmlDom[0]->nodes, $initial_state);
 $htmlDom->clear();
 unset($htmlDom);
 // read host tmp directory with permission to write files
-$tmpDir = 'templates/tempdir/';
+$tmpDir = __DIR__ . '/templates/tempdir/';
 // Save HTML from CKEditor as temporary description file
 $tmpFileLocation = tempnam($tmpDir,'zip');
 $objWriter = PHPWord_IOFactory::createWriter($phpwordObject, 'Word2007');

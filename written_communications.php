@@ -2,12 +2,12 @@
 /******************************************************************************
  * Plugin Written communications
  *
- * Copyright    : (c) 2004 - 2017 The Admidio Team
+ * Copyright    : (c) 2004 - 2018 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- * Version      : 3.1
- * Required     : Admidio Version 3.2
+ * Version      : 3.2
+ * Required     : Admidio Version 3.3
  *
  *****************************************************************************/
 
@@ -21,9 +21,9 @@ if(!defined('PLUGIN_PATH'))
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
 
-require_once('../../adm_program/system/common.php');
-require_once('config.php');
-require_once('../../adm_program/system/login_valid.php');
+require_once(PLUGIN_PATH . '../../adm_program/system/common.php');
+require_once(ADMIDIO_PATH . FOLDER_PLUGINS. '/written_communications/config.php');
+require_once(ADMIDIO_PATH . '/adm_program/system/login_valid.php');
 
 // Check config parameters and define if not exists
 if(!isset($plg_wc_roleAccess))
@@ -75,9 +75,9 @@ $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 $getHeadline  = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PLG_WC_CREATE_WRITTEN_COMMUNICATIONS')),false);
 $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
 //* Check if own templates are available and set template path
-if(is_dir('../../adm_my_files/' . TableFolder::getRootFolderName() . '/MSWord_Templates'))
+if(is_dir(ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName() . '/MSWord_Templates'))
 {
-    $dir = '../../adm_my_files/' . TableFolder::getRootFolderName() . '/MSWord_Templates';
+    $dir = ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName() . '/MSWord_Templates';
 }
 else
 {
