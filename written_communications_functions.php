@@ -32,28 +32,17 @@
  *
  ************************************************************************************/
 
- // create path to plugin
-$plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
+$rootPath = dirname(dirname(__DIR__));
+$pluginFolder = basename(__DIR__);
 
-if(!defined('PLUGIN_PATH'))
-{
-    define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
-}
-
-require_once(PLUGIN_PATH . '../../adm_program/system/common.php');
-require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/datetimeextended.php');
-require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/htmlform.php');
-require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/htmlnavbar.php');
-require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/htmlpage.php');
-require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/menu.php');
-require_once(ADMIDIO_PATH . FOLDER_CLASSES . '/tablemessage.php');
+require_once($rootPath . '/adm_program/system/common.php');
 require_once(__DIR__ . '/classes/PHPWord.php');
 require_once(__DIR__ . '/classes/simplehtmldom/simple_html_dom.php');
 require_once(__DIR__ . '/classes/htmltodocx_converter/h2d_htmlconverter.php');
 require_once(__DIR__ . '/classes/adm_RoleMembers.php');
 require_once(__DIR__ . '/classes/styles.inc');
 require_once(__DIR__ . '/config.php');
-require_once(ADMIDIO_PATH . '/adm_program/system/logging.php');
+require_once($rootPath . '/adm_program/system/logging.php');
 
 // Function to pick up all html color attributes in current string and convert it in a class attributes with value of the color.
 // It also assigns the created class attributes in the replaced string based on the color style to the style array on the fly.

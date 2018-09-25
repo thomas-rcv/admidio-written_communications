@@ -11,19 +11,12 @@
  *
  *****************************************************************************/
 
-// create path to plugin
-$plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
-$plugin_file_pos   = strpos(__FILE__, 'written_communications.php');
-$plugin_folder     = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2);
+$rootPath = dirname(dirname(__DIR__));
+$pluginFolder = basename(__DIR__);
 
-if(!defined('PLUGIN_PATH'))
-{
-    define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
-}
-
-require_once(PLUGIN_PATH . '../../adm_program/system/common.php');
-require_once(ADMIDIO_PATH . FOLDER_PLUGINS. '/written_communications/config.php');
-require_once(ADMIDIO_PATH . '/adm_program/system/login_valid.php');
+require_once($rootPath . '/adm_program/system/common.php');
+require_once(__DIR__. '/config.php');
+require_once($rootPath . '/adm_program/system/login_valid.php');
 
 // Check config parameters and define if not exists
 if(!isset($plg_wc_roleAccess))
@@ -70,7 +63,7 @@ if(!$plg_wc_access)
 }
 
 // Register plugin language files
-$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+$gL10n->addLanguagePath($pluginFolder.'/languages');
 // Intitialize parameter
 $getHeadline  = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PLG_WC_CREATE_WRITTEN_COMMUNICATIONS')),false);
 $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
