@@ -263,7 +263,7 @@ unset($htmlDom);
 // read host tmp directory with permission to write files
 $tmpDir = __DIR__ . '/templates/tempdir/';
 // Save HTML from CKEditor as temporary description file
-$tmpFileLocation = tempnam($tmpDir,'zip');
+$tmpFileLocation = @tempnam($tmpDir,'zip');
 $objWriter = PHPWord_IOFactory::createWriter($phpwordObject, 'Word2007');
 $objWriter->save($tmpFileLocation);
 // read file as temporary template
