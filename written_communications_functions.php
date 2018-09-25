@@ -41,8 +41,13 @@ require_once(__DIR__ . '/classes/simplehtmldom/simple_html_dom.php');
 require_once(__DIR__ . '/classes/htmltodocx_converter/h2d_htmlconverter.php');
 require_once(__DIR__ . '/classes/adm_RoleMembers.php');
 require_once(__DIR__ . '/classes/styles.inc');
-require_once(__DIR__ . '/config.php');
 require_once($rootPath . '/adm_program/system/logging.php');
+
+// only include config file if it exists
+if (is_file(__DIR__ . '/config.php'))
+{
+    require_once(__DIR__ . '/config.php');
+}
 
 // Function to pick up all html color attributes in current string and convert it in a class attributes with value of the color.
 // It also assigns the created class attributes in the replaced string based on the color style to the style array on the fly.
