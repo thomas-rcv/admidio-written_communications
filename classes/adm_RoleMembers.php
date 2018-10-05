@@ -6,7 +6,7 @@
  *  This class is developed, to read active,former or all members of a selected role from database.
  *  Also it can read all users from database and search users using a search term for lastname or firstname.
  *  The result of the database query is stored in an associative array with needed information
- *  for each member. Each recordset contains User ID, name, address, location, postcode, birthday and 
+ *  for each member. Each recordset contains User ID, name, street, location, postcode, birthday and 
  *  status of role membership and also leader status of the role. All role memberships
  *  of the member are also counted and stored in the output array. 
  *  Additional profile fields can be set with function to expand the user datas of the recordset if required 
@@ -24,7 +24,7 @@
  *              [3] => 
  *              [city] => 
  *              [4] => 
- *              [address] => 
+ *              [street] => 
  *              [5] => 
  *              [zip_code] => 
  *              [6] => DEU
@@ -144,7 +144,7 @@ class RoleMembers
 
          // Prepare SQL statement
         $sql = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday,
-                        city.usd_value as city, address.usd_value as address, zip_code.usd_value as zip_code, country.usd_value as country,
+                        city.usd_value as city, street.usd_value as street, zip_code.usd_value as zip_code, country.usd_value as country,
                         '.$this->additionalProfileFields.' mem_usr_id as member_this_role, mem_leader as leader_this_role,
                           (SELECT count(*)
                              FROM '. TBL_ROLES. ' rol2, '. TBL_CATEGORIES. ' cat2, '. TBL_MEMBERS. ' mem2
@@ -169,9 +169,9 @@ class RoleMembers
                 LEFT JOIN '. TBL_USER_DATA. ' as city
                   ON city.usd_usr_id = usr_id
                  AND city.usd_usf_id = '. $gProfileFields->getProperty('CITY', 'usf_id'). '
-                LEFT JOIN '. TBL_USER_DATA. ' as address
-                  ON address.usd_usr_id = usr_id
-                 AND address.usd_usf_id = '. $gProfileFields->getProperty('ADDRESS', 'usf_id'). '
+                LEFT JOIN '. TBL_USER_DATA. ' as street
+                  ON street.usd_usr_id = usr_id
+                 AND street.usd_usf_id = '. $gProfileFields->getProperty('STREET', 'usf_id'). '
                 LEFT JOIN '. TBL_USER_DATA. ' as zip_code
                   ON zip_code.usd_usr_id = usr_id
                  AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '

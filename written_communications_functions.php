@@ -188,7 +188,7 @@ if($getRoleSelect > 0 && $getRecipientMode == 'Role')
         {
             $arrRecipient[] = array('Recipient_Organization'    => '',
                                     'Recipient_Name'            => $memberData['first_name'].' '.$memberData['last_name'],
-                                    'Recipient_Address'         => $memberData['address'],
+                                    'Recipient_Address'         => $memberData['street'],
                                     'Recipient_Postcode'        => $memberData['zip_code'],
                                     'Recipient_City'            => $memberData['city']);
         }
