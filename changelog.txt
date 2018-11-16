@@ -38,4 +38,6 @@ Changelog
                             
 08.01.2017  Release 3.1:    - Compatibility with Admidio 3.2
                             - changed folder path of the user tamplates to new organization folder names in the Download module.
-                            - renamed "Webmaster" to "Administrator" in the config file ( $plg_wc_roleArray = array('Administrator'); ).                      
+                            - renamed "Webmaster" to "Administrator" in the config file ( $plg_wc_roleArray = array('Administrator'); ). 
+
+16.11.2018  Release 3.2.1:  - Compatibility with Admidio 3.3

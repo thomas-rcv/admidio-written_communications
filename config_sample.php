@@ -9,7 +9,6 @@
  * Author       : Thomas-RCV
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- * Version      : 3.1
  * 
  *****************************************************************************/
 

@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- * Version      : 3.2
+ * Version      : 3.2.1
  * Required     : Admidio Version 3.3
  *
  *****************************************************************************/
