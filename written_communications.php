@@ -2,7 +2,7 @@
 /******************************************************************************
  * Plugin Written communications
  *
- * Copyright    : (c) 2004 - 2018 The Admidio Team
+ * Copyright    : (c) 2004 - 2019 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -103,6 +103,8 @@ while($file = readdir($folder))
 closedir($folder);
 // create html page object
 $page = new HtmlPage($getHeadline);
+$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
+
 // Javascript for select boxes
 $page->addJavascript('$(document).ready(function () {
     $("#plg_wc_recipient_manual").hide();
@@ -133,9 +135,6 @@ $page->addJavascript('$(document).ready(function () {
 
 // Navigation starts here
 $gNavigation->addUrl(CURRENT_URL);
-// add back link to module menu
-$WC_Menu = $page->getMenu();
-$WC_Menu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 // show form
 $form = new HtmlForm('plg_wc_form', 'written_communications_functions.php', $page);
 

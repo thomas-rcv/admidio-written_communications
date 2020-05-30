@@ -2,7 +2,7 @@
 /*************************************************************************************
  * Plugin Written communications functions
  *
- * Copyright    : (c) 2004 - 2018 The Admidio Team
+ * Copyright    : (c) 2004 - 2019 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
