@@ -67,8 +67,6 @@ if(!$plg_wc_access)
     exit();
 }
 
-// Register plugin language files
-$gL10n->addLanguagePath($pluginFolder.'/languages');
 // Intitialize parameter
 $getHeadline  = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PLG_WC_CREATE_WRITTEN_COMMUNICATIONS')),false);
 $getActiveRole  = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
@@ -102,8 +100,7 @@ while($file = readdir($folder))
 }
 closedir($folder);
 // create html page object
-$page = new HtmlPage($getHeadline);
-$page->setUrlPreviousPage($gNavigation->getPreviousUrl());
+$page = new HtmlPage('admidio-plugin-written-communication', $getHeadline);
 
 // Javascript for select boxes
 $page->addJavascript('$(document).ready(function () {
@@ -139,7 +136,7 @@ $gNavigation->addUrl(CURRENT_URL);
 $form = new HtmlForm('plg_wc_form', 'written_communications_functions.php', $page);
 
 $form->openGroupBox('plg_wc_template_choice', $gL10n->get('PLG_WC_CHOOSE_TEMPLATE'));
-$form->addSelectBox('plg_wc_template', $gL10n->get('PLG_WC_CHOOSE_TEMPLATE'), $templateSelectionBox, array('property' => FIELD_REQUIRED));
+$form->addSelectBox('plg_wc_template', $gL10n->get('PLG_WC_CHOOSE_TEMPLATE'), $templateSelectionBox, array('property' => HtmlForm::FIELD_REQUIRED));
 $form->closeGroupBox();
 
 $form->openGroupBox('plg_wc_selection', $gL10n->get('PLG_WC_SELECTION'));
@@ -167,10 +164,10 @@ $sql = 'SELECT rol_id, rol_name, cat_name
                OR cat_org_id IS NULL )
       ORDER BY cat_sequence, rol_name';
 $form->addSelectBoxFromSql('role_select', $gL10n->get('SYS_ROLE'), $gDb, $sql,
-    array('property' => FIELD_REQUIRED, 'defaultValue' => 0, 'multiselect' => false));
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => 0, 'multiselect' => false));
 $showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
 $form->addSelectBox('show_members', $gL10n->get('LST_CONFIGURATION'), $showMembersSelection,
-    array('property' => FIELD_REQUIRED, 'defaultValue' => $selectBoxEntries, 'showContextDependentFirstEntry' => false));
+    array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $selectBoxEntries, 'showContextDependentFirstEntry' => false));
 $form->closeGroupBox();
 
 $form->openGroupBox('plg_wc_recipient_manual', $gL10n->get('SYS_RECIPIENT'));
@@ -186,7 +183,7 @@ $form->addInput('plg_wc_subject', $gL10n->get('MAI_SUBJECT'), '');
 $form->addEditor('plugin_CKEditor', null, '', array('toolbar' => 'AdmidioPlugin_WC'));
 $form->closeGroupBox();
  // add submit button
-$form->addSubmitButton('btn_send', $gL10n->get('PLG_WC_DOWNLOAD_DOCUMENT'), array('icon' => THEME_PATH.'/icons/page_white_word.png'));
+$form->addSubmitButton('btn_send', $gL10n->get('PLG_WC_DOWNLOAD_DOCUMENT'), array('icon' => 'fa-file-download'));
 // add form to html page
 $page->addHtml($form->show(false));
 // show page

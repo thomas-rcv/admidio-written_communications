@@ -39,7 +39,7 @@ require_once(__DIR__ . '/classes/simplehtmldom/simple_html_dom.php');
 require_once(__DIR__ . '/classes/htmltodocx_converter/h2d_htmlconverter.php');
 require_once(__DIR__ . '/classes/adm_RoleMembers.php');
 require_once(__DIR__ . '/classes/styles.inc');
-require_once($rootPath . '/adm_program/system/logging.php');
+require_once($rootPath . '/adm_program/system/bootstrap/logging.php');
 
 // only include config file if it exists
 if (is_file(__DIR__ . '/config.php'))
@@ -66,13 +66,13 @@ function assignHtmlColorAttributes($htmlString, $offset = 0)
                  preg_match('/\<span style="color:(.*?)"\>/', substr($htmlString, $pos), $output);
                  // Convert in a class attribute with value of the color.
                  $htmlString = preg_replace_callback( $output[0],
-                  
+
                                                         function() use ($output)
-                                                        {   
+                                                        {
                                                             return 'span class="'.$output[1].'"';
                                                         },
                                                         $htmlString);
-                                                        
+
                  // Define class attribute for color in state array
                  $initial_state['style_sheet']['classes'][$output[1]] = array('color' => strtoupper(substr($output[1],1)));
              }
@@ -225,7 +225,7 @@ $template = $templatePath. '/' .$getTemplate;
 $objDate = new DateTime(DATE_NOW);
 $objDate->format('Y-m-d');
 
-$dateSystemFormat = $objDate->format($gPreferences['system_date']);
+$dateSystemFormat = $objDate->format($gSettingsManager->getString('system_date'));
 // Define file name
 $filename = $templatePath. '/' .$gL10n->get('PLG_WC_FILENAME').'_'.$dateSystemFormat.'.docx';
 
@@ -307,7 +307,7 @@ foreach($arrRecipient as $Recipient)
     $document->setValue('Sender_Postcode', $arrSender['Sender_Postcode']);
     $document->setValue('Sender_City', $arrSender['Sender_City']);
     $document->setValue('Subject', $getSubject);
-    
+
     if($getRoleSelect > 0 && $getRecipientMode == 'Role')
     // fill additional profile fields registered in config file
     if(count($plg_wc_arrCustomProfileFields) > 0)

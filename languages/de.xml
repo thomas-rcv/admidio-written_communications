@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="de">
-    <version id="1.0" translator="Thomas-RCV">
-        <text id="PLG_WC_ADDRESS_USER" development="new" translation="todo">Meine Adresse als Absender verwenden</text>
-        <text id="PLG_WC_CREATE_WRITTEN_COMMUNICATIONS" development="new" translation="todo">Briefdokument erstellen</text>
-        <text id="PLG_WC_CHOOSE_TEMPLATE" development="new" translation="todo">Vorlage auswählen:</text>
-        <text id="PLG_WC_DOWNLOAD_DOCUMENT" development="new" translation="todo">Dokument herunterladen</text>
-        <text id="PLG_WC_FILENAME" development="new" translation="todo">Briefdokument</text>
-        <text id="PLG_WC_SELECTION" development="new" translation="todo">Auswahl:</text>
-        <text id="PLG_WC_INDIVIDUAL_RECIPIENT" development="new" translation="todo">individueller Empfänger</text>
-    </version>
-</language>
+<resources>
+   <string name="PLG_WC_ADDRESS_USER">Meine Adresse als Absender verwenden</string>
+   <string name="PLG_WC_CREATE_WRITTEN_COMMUNICATIONS">Briefdokument erstellen</string>
+   <string name="PLG_WC_CHOOSE_TEMPLATE">Vorlage auswählen:</string>
+   <string name="PLG_WC_DOWNLOAD_DOCUMENT">Dokument herunterladen</string>
+   <string name="PLG_WC_FILENAME">Briefdokument</string>
+   <string name="PLG_WC_SELECTION">Auswahl:</string>
+   <string name="PLG_WC_INDIVIDUAL_RECIPIENT">individueller Empfänger</string>
+</resources>
