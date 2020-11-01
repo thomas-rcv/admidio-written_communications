@@ -28,16 +28,18 @@ Changelog
                             - [todo] Color style in CKEditor does not work with new CKeditor Script -> bugfix release in between the plugin **
 
 28.09.2015  Release 2.0.1:  - [Bug] Classes are not loaded if throwing message that valid entries are not found.
-                            - [Bug] File path for templates not set correctly.  
+                            - [Bug] File path for templates not set correctly.
                             - [internal] Reworked name convention to camel caps.
-                  
+
 12.10.2016  Release 3.0:    - Compatibility with Admidio 3.1
                             - PHP7 ready
                             - [new] Language "de_sie"
                             - [rework] text color style assignment
-                            
+
 08.01.2017  Release 3.1:    - Compatibility with Admidio 3.2
                             - changed folder path of the user tamplates to new organization folder names in the Download module.
-                            - renamed "Webmaster" to "Administrator" in the config file ( $plg_wc_roleArray = array('Administrator'); ). 
+                            - renamed "Webmaster" to "Administrator" in the config file ( $plg_wc_roleArray = array('Administrator'); ).
 
 16.11.2018  Release 3.2.1:  - Compatibility with Admidio 3.3
+
+16.11.2018  Release 3.3.0:  - Compatibility with Admidio 4.0
