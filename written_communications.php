@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- * Version      : 3.3.0
+ * Version      : 3.3.1
  * Required     : Admidio Version 4.0
  *
  *****************************************************************************/
@@ -81,7 +81,7 @@ else
 }
 
 // Define selectbox for membership conditon
-$selectBoxEntries = array(0 => $gL10n->get('LST_ACTIVE_MEMBERS'), 1 => $gL10n->get('LST_FORMER_MEMBERS'), 2 => $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
+$selectBoxEntries = array(0 => $gL10n->get('SYS_ACTIVE_MEMBERS'), 1 => $gL10n->get('SYS_FORMER_MEMBERS'), 2 => $gL10n->get('SYS_ACTIVE_FORMER_MEMBERS'));
 // read templates and create template array
 $templateSelectionBox = array();
 $folder = opendir($dir);
@@ -165,8 +165,8 @@ $sql = 'SELECT rol_id, rol_name, cat_name
       ORDER BY cat_sequence, rol_name';
 $form->addSelectBoxFromSql('role_select', $gL10n->get('SYS_ROLE'), $gDb, $sql,
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => 0, 'multiselect' => false));
-$showMembersSelection = array($gL10n->get('LST_ACTIVE_MEMBERS'), $gL10n->get('LST_FORMER_MEMBERS'), $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
-$form->addSelectBox('show_members', $gL10n->get('LST_CONFIGURATION'), $showMembersSelection,
+$showMembersSelection = array($gL10n->get('SYS_ACTIVE_MEMBERS'), $gL10n->get('SYS_FORMER_MEMBERS'), $gL10n->get('SYS_ACTIVE_FORMER_MEMBERS'));
+$form->addSelectBox('show_members', $gL10n->get('SYS_CONFIGURATION'), $showMembersSelection,
     array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $selectBoxEntries, 'showContextDependentFirstEntry' => false));
 $form->closeGroupBox();
 
