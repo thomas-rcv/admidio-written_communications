@@ -91,7 +91,7 @@ while($file = readdir($folder))
     if ($file != "." && $file != "..")
     {
         // if docx template available assign to options
-        if(preg_match('/.docx/', $file))
+        if(preg_match('/\.docx/', $file))
         {
             $templateSelectionBox[$file] = substr($file, 0, -5);
         }
