@@ -135,13 +135,13 @@ $getCommunication           = admFuncVariableIsValid($_POST, 'plugin_CKEditor', 
 $getRecipientMode           = admFuncVariableIsValid($_POST, 'recipient_mode', 'string', array('defaultValue' => 'Role'));
 $getRecipientOrganization   = admFuncVariableIsValid($_POST, 'plg_wc_recipient_organization', 'string', array('defaultValue' => ''));
 $getRecipientName           = admFuncVariableIsValid($_POST, 'plg_wc_recipient_name', 'string', array('defaultValue' => ''));
-$getRecipientAddress        = admFuncVariableIsValid($_POST, 'plg_wc_recipient_address', 'string', array('defaultValue' => ''));
+$getRecipientStreet         = admFuncVariableIsValid($_POST, 'plg_wc_recipient_street', 'string', array('defaultValue' => ''));
 $getRecipientPostcode       = admFuncVariableIsValid($_POST, 'plg_wc_recipient_postcode', 'string', array('defaultValue' => ''));
 $getRecipientCity           = admFuncVariableIsValid($_POST, 'plg_wc_recipient_city', 'string', array('defaultValue' => ''));
 $getRoleSelect              = admFuncVariableIsValid($_POST, 'role_select', 'string');
 $getSenderOrganization      = admFuncVariableIsValid($_POST, 'plg_wc_sender_organization', 'string', array('defaultValue' => ''));
 $getSenderName              = admFuncVariableIsValid($_POST, 'plg_wc_sender_name', 'string', array('defaultValue' => ''));
-$getSenderAddress           = admFuncVariableIsValid($_POST, 'plg_wc_sender_address', 'string', array('defaultValue' => ''));
+$getSenderStreet            = admFuncVariableIsValid($_POST, 'plg_wc_sender_street', 'string', array('defaultValue' => ''));
 $getSenderPostcode          = admFuncVariableIsValid($_POST, 'plg_wc_sender_postcode', 'string', array('defaultValue' => ''));
 $getSenderCity              = admFuncVariableIsValid($_POST, 'plg_wc_sender_city', 'string', array('defaultValue' => ''));
 $getShowMembers             = admFuncVariableIsValid($_POST, 'show_members', 'string', array('defaultValue' => ''));
@@ -153,7 +153,7 @@ if(isset($_POST['sender_user']))
     // Get profile fields of current user
     $arrSender = array( 'Sender_Organization'   => $gCurrentOrganization->getValue('org_longname'),
                         'Sender_Name'           => $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'),
-                        'Sender_Address'        => $gCurrentUser->getValue('ADDRESS'),
+                        'Sender_Street'         => $gCurrentUser->getValue('STREET'),
                         'Sender_Postcode'       => $gCurrentUser->getValue('POSTCODE'),
                         'Sender_City'           => $gCurrentUser->getValue('CITY'));
 }
@@ -161,7 +161,7 @@ else
 {
     $arrSender = array( 'Sender_Organization'   => $getSenderOrganization,
                         'Sender_Name'           => $getSenderName,
-                        'Sender_Address'        => $getSenderAddress,
+                        'Sender_Street'         => $getSenderStreet,
                         'Sender_Postcode'       => $getSenderPostcode,
                         'Sender_City'           => $getSenderCity);
 }
@@ -186,7 +186,7 @@ if($getRoleSelect > 0 && $getRecipientMode == 'Role')
         {
             $arrRecipient[] = array('Recipient_Organization'    => '',
                                     'Recipient_Name'            => $memberData['first_name'].' '.$memberData['last_name'],
-                                    'Recipient_Address'         => $memberData['street'],
+                                    'Recipient_Street'          => $memberData['street'],
                                     'Recipient_Postcode'        => $memberData['zip_code'],
                                     'Recipient_City'            => $memberData['city']);
         }
@@ -202,7 +202,7 @@ else
     // no role select. use form values instead
     $arrRecipient[] = array('Recipient_Organization'   => $getRecipientOrganization,
                             'Recipient_Name'           => $getRecipientName,
-                            'Recipient_Address'        => $getRecipientAddress,
+                            'Recipient_Street'         => $getRecipientStreet,
                             'Recipient_Postcode'       => $getRecipientPostcode,
                             'Recipient_City'           => $getRecipientCity);
 }
@@ -298,12 +298,14 @@ foreach($arrRecipient as $Recipient)
     $document->setValue('LetterDate', $dateSystemFormat);
     $document->setValue('Recipient_Organization', $Recipient['Recipient_Organization']);
     $document->setValue('Recipient_Name', $Recipient['Recipient_Name']);
-    $document->setValue('Recipient_Address', $Recipient['Recipient_Address']);
+    $document->setValue('Recipient_Address', $Recipient['Recipient_Street']);
+    $document->setValue('Recipient_Street', $Recipient['Recipient_Street']);
     $document->setValue('Recipient_Postcode', $Recipient['Recipient_Postcode']);
     $document->setValue('Recipient_City', $Recipient['Recipient_City']);
     $document->setValue('Sender_Organization', $arrSender['Sender_Organization']);
     $document->setValue('Sender_Name', $arrSender['Sender_Name']);
-    $document->setValue('Sender_Address', $arrSender['Sender_Address']);
+    $document->setValue('Sender_Address', $arrSender['Sender_Street']);
+    $document->setValue('Sender_Street', $arrSender['Sender_Street']);
     $document->setValue('Sender_Postcode', $arrSender['Sender_Postcode']);
     $document->setValue('Sender_City', $arrSender['Sender_City']);
     $document->setValue('Subject', $getSubject);
