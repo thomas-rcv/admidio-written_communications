@@ -1,7 +1,7 @@
 /*************************************************************************************
  * Plugin Written communications documentation
  *
- * Copyright    : (c) 2004 - 2017 The Admidio Team
+ * Copyright    : (c) 2004-2021 The Admidio Team
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -48,3 +48,5 @@ Changelog
 
 15.11.2020  Release 3.3.2:  - PHP 7.4 compatibility
                             - Update SimpleHtmlDom library to version 1.9.1
+
+24.01.2021  Release 3.3.3:  - [Bug] Output of street was not possible because of a rename of the internal field name

@@ -5,11 +5,11 @@
  * Rename this file to config.php if you want to change some of the preferences below. The plugin
  * will only read the parameters from config.php and not the example file.
  *
- * Copyright    : (c) 2004 - 2019 The Admidio Team
+ * Copyright    : (c) 2004-2021 The Admidio Team
  * Author       : Thomas-RCV
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- * 
+ *
  *****************************************************************************/
 
 // Parameters enables access with role control
@@ -27,8 +27,8 @@ $plg_wc_roleArray = array('Administrator');
 
 // This array can be used to define additional profile fields for the template engine.
 // Customizable key/value pairs can be defined according to your database definitions of the profile fields.
-// The "key" represents the placeholder you want to use in the template while the "value" of the "key" defines the name of the 
-// profile field from database you want to use in the template. 
+// The "key" represents the placeholder you want to use in the template while the "value" of the "key" defines the name of the
+// profile field from database you want to use in the template.
 // To define additional profile fields as a value in the array, the value of "usf_name_intern" of the table user_fields must be used!
 // Please check your database entries of the needed columns for correct implementation!
 // Example to configure the email address and the mobile number as placeholders for the template:
@@ -36,7 +36,7 @@ $plg_wc_roleArray = array('Administrator');
 // The placeholders ${UserEmail} and ${UserMobile} can now be used in the templates and are automatically replaced by the values of the profile fields.
 
 $plg_wc_arrCustomProfileFields = array('UserEmail' => 'EMAIL');
-                                                        
+
 // This array can be used to define free text as placeholder that is often used in your communications.
 // The definiton of text is like you do it in the array $plg_wc_arrCustomProfileFields
 
