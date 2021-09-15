@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+   <string name="PLG_WC_ADDRESS_USER">Käytä osoitettani lähettäjänä</string>
+   <string name="PLG_WC_CREATE_WRITTEN_COMMUNICATIONS">Luo kirjallinen viestintä</string>
+   <string name="PLG_WC_CHOOSE_TEMPLATE">Valitse malli</string>
+   <string name="PLG_WC_DOWNLOAD_DOCUMENT">Lataa dokumentti</string>
+   <string name="PLG_WC_FILENAME">Kirjeenvaihto</string>
+   <string name="PLG_WC_SELECTION">Valinta</string>
+   <string name="PLG_WC_INDIVIDUAL_RECIPIENT">Yksittäinen vastaanottaja</string>
+</resources>
