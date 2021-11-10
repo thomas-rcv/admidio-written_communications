@@ -6,13 +6,13 @@
  *  This class is developed, to read active,former or all members of a selected role from database.
  *  Also it can read all users from database and search users using a search term for lastname or firstname.
  *  The result of the database query is stored in an associative array with needed information
- *  for each member. Each recordset contains User ID, name, street, location, postcode, birthday and 
+ *  for each member. Each recordset contains User ID, name, street, location, postcode, birthday and
  *  status of role membership and also leader status of the role. All role memberships
- *  of the member are also counted and stored in the output array. 
- *  Additional profile fields can be set with function to expand the user datas of the recordset if required 
+ *  of the member are also counted and stored in the output array.
+ *  Additional profile fields can be set with function to expand the user datas of the recordset if required
  *  @par Returned array with recordsets:
- *  @code 
- *  array(         
+ *  @code
+ *  array(
  *    [0] => Array
  *          (
  *              [0] => 6
@@ -21,12 +21,12 @@
  *              [last_name] => Lastname
  *              [2] => Firstname
  *              [first_name] => Firstname
- *              [3] => 
- *              [city] => 
- *              [4] => 
- *              [street] => 
- *              [5] => 
- *              [zip_code] => 
+ *              [3] =>
+ *              [city] =>
+ *              [4] =>
+ *              [street] =>
+ *              [5] =>
+ *              [zip_code] =>
  *              [6] => DEU
  *              [country] => DEU
  *              [7] => 6
@@ -50,7 +50,7 @@
 
 class RoleMembers
 {
-    public  $arrMembers;                ///< Array with prepared recordset of all members of the current role    
+    public  $arrMembers;                ///< Array with prepared recordset of all members of the current role
     public  $db;                        ///< Database object to handle the communication with the database. This must be public because of session handling.
     private $limit;                     ///< Limit of the query result
     private $memberCondition;           ///< Internal member condition
@@ -59,31 +59,31 @@ class RoleMembers
     private $sqlConditions;             ///< Internal SQL condition statement for the query
     protected $additionalProfileFields; ///< String with additional profile fields added to the database query
     protected $additionalSQLJoin;       ///< String for additional table join to get profile field data
-    
+
     /**
      *  Constructor that will create an object of a recordset of the specified role.
      *  Optional parameter for status of a membership can be set to chosse all, active or former memberships of the current role
-     *  @param $db Object of the class database. This should be the default object @b $gDb. 
+     *  @param $db Object of the class database. This should be the default object @b $gDb.
      *  @param $rol_id Id of the role the members are needed
      *  @param $showMembers Status for the query( Default 0:  for active members, 1 for former members, 2 all member )
      *  @par Example
-     *  @code // Creating the instance 
-     *  $members = new RoleMembers($gDB, 2) // Role Id 2 is set. Also a third parameter can be passed for the status of membership (0 = active, 1 = former, 2 = all)  
+     *  @code // Creating the instance
+     *  $members = new RoleMembers($gDB, 2) // Role Id 2 is set. Also a third parameter can be passed for the status of membership (0 = active, 1 = former, 2 = all)
      *  $arrResult = $members->getRoleMembers();
      *  @endcode
      */
     public function __construct(&$db, $rol_id = 0, $showMembers = 0)
     {
         global $gCurrentOrganization;
-        
+
         $this->additionalProfileFields  = '';
         $this->additionalSQLJoin        = '';
         $this->arrMembers               = array();
         $this->db                       =& $db;
         $this->limit                    = '';
         $this->roleId                   = $rol_id;
-        $this->showMembers              = $showMembers; 
-        
+        $this->showMembers              = $showMembers;
+
         if($this->showMembers == 1)
         {
             // only former members
@@ -100,26 +100,26 @@ class RoleMembers
             $this->sqlConditions = ' AND mem_begin  <= \''.DATE_NOW.'\'
                                AND mem_end     > \''.DATE_NOW.'\' ';
         }
-        
+
         $this->memberCondition  = ' EXISTS
                                     (SELECT 1
                                        FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                                       WHERE mem_usr_id = usr_id
                                         AND mem_rol_id = rol_id '. $this->sqlConditions .'
-                                        AND rol_valid  = 1
+                                        AND rol_valid  = true
                                         AND rol_cat_id = cat_id
                                         AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                                             OR cat_org_id IS NULL )) ';
     }
-    
+
     /**
-     *  Add additional profile fields to SQL query 
+     *  Add additional profile fields to SQL query
      *  @param $array Array with key/value pairs. The value must be like the profile field named in data_field_intern
      */
     public function addProfileFields($array)
     {
         global $gProfileFields;
-        
+
         if(!is_array($array))
         {
             throw new Exception('Profile fields must be passed as array with key=>value to add profile fields');
@@ -132,10 +132,10 @@ class RoleMembers
                                             AND '.$value.'.usd_usf_id = '. $gProfileFields->getProperty(strtoupper($value), 'usf_id') .' ';
         }
     }
-    
+
     /**
      *  Prepare SQL query an get the recordset as array
-     *  @return Returns an associative array with recordsets of all members of the current role. 
+     *  @return Returns an associative array with recordsets of all members of the current role.
      */
     public function getRoleMembers()
     {
@@ -148,7 +148,7 @@ class RoleMembers
                         '.$this->additionalProfileFields.' mem_usr_id as member_this_role, mem_leader as leader_this_role,
                           (SELECT count(*)
                              FROM '. TBL_ROLES. ' rol2, '. TBL_CATEGORIES. ' cat2, '. TBL_MEMBERS. ' mem2
-                            WHERE rol2.rol_valid   = 1
+                            WHERE rol2.rol_valid   = true
                               AND rol2.rol_cat_id  = cat2.cat_id
                               AND (  cat2.cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                                   OR cat2.cat_org_id IS NULL )
@@ -177,34 +177,34 @@ class RoleMembers
                  AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '
                 LEFT JOIN '. TBL_USER_DATA. ' as country
                   ON country.usd_usr_id = usr_id
-                 AND country.usd_usf_id = '. $gProfileFields->getProperty('COUNTRY', 'usf_id').' 
-                    
-                '.$this->additionalSQLJoin.' 
-                 
+                 AND country.usd_usf_id = '. $gProfileFields->getProperty('COUNTRY', 'usf_id').'
+
+                '.$this->additionalSQLJoin.'
+
                 LEFT JOIN '. TBL_ROLES. ' rol
-                  ON rol.rol_valid   = 1
+                  ON rol.rol_valid   = true
                  AND rol.rol_id      = '.$this->roleId.'
                 LEFT JOIN '. TBL_MEMBERS. ' mem
                   ON mem.mem_rol_id  = rol.rol_id '. $this->sqlConditions .'
-                 AND mem.mem_usr_id  = usr_id      
+                 AND mem.mem_usr_id  = usr_id
                 WHERE '. $this->memberCondition. '
                 ORDER BY last_name, first_name '.$this->limit;
-        
+
         $resultUser = $this->db->query($sql);
         while($row = $resultUser->fetch())
         {
             // Read role members of the current role
             if($row['member_this_role'] > 0)
-            {  
+            {
                 $this->arrMembers[] = $row;
             }
         }
         return $this->arrMembers;
     }
-    
+
     /**
      *  Set a limit for the database query
-     *  @param $integer Integer value as limit 
+     *  @param $integer Integer value as limit
      */
     public function setLimit($integer)
     {
@@ -214,7 +214,7 @@ class RoleMembers
         }
         return $this;
     }
-    
+
     /**
      *  Set a search term for members
      *  @param $term Searchstring for members looking for lastname and firstname
@@ -229,15 +229,15 @@ class RoleMembers
 	    }
 	    return $this;
     }
-    
+
     /**
-     *  Get all members from database 
+     *  Get all members from database
      */
     public function showAllMembers()
     {
-        $this->memberCondition = ' usr_valid = 1 ';
+        $this->memberCondition = ' usr_valid = true ';
         $this->roleId = '2';
-        return $this->getRoleMembers(); 
+        return $this->getRoleMembers();
     }
 }
 ?>

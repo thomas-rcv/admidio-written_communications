@@ -158,8 +158,8 @@ $sql = 'SELECT rol_id, rol_name, cat_name
           FROM '.TBL_ROLES.'
     INNER JOIN '.TBL_CATEGORIES.'
             ON cat_id = rol_cat_id
-         WHERE rol_valid   = '.$getActiveRole.'
-           AND rol_profile = 1
+         WHERE rol_valid   = '.($getActiveRole === true ? 'true' : 'false').'
+           AND rol_profile = true
            AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL )
       ORDER BY cat_sequence, rol_name';
@@ -179,7 +179,7 @@ $form->addInput('plg_wc_recipient_city', $gL10n->get('SYS_CITY'), '');
 $form->closeGroupBox();
 // add editor for message
 $form->openGroupBox('plg_wc_description', $gL10n->get('SYS_TEXT'));
-$form->addInput('plg_wc_subject', $gL10n->get('MAI_SUBJECT'), '');
+$form->addInput('plg_wc_subject', $gL10n->get('SYS_SUBJECT'), '');
 $form->addEditor('plugin_CKEditor', null, '', array('toolbar' => 'AdmidioPlugin_WC'));
 $form->closeGroupBox();
  // add submit button
