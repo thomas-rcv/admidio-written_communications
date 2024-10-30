@@ -17,65 +17,50 @@ require_once($rootPath . '/adm_program/system/common.php');
 require_once($rootPath . '/adm_program/system/login_valid.php');
 
 // only include config file if it exists
-if (is_file(__DIR__ . '/config.php'))
-{
+if (is_file(__DIR__ . '/config.php')) {
     require_once(__DIR__ . '/config.php');
 }
 
 // Check config parameters and define if not exists
-if(!isset($plg_wc_roleAccess))
-{
+if (!isset($plg_wc_roleAccess)) {
     // set to "0" if missing and enable plugin for all members of the organization
     $plg_wc_roleAccess = 0;
 }
-if(!isset($plg_wc_roleArray))
-{
+if (!isset($plg_wc_roleArray)) {
     $plg_wc_roleArray = array('Administrator');
 }
 
 // Check current user for valid access to plugin
-if($gValidLogin)
-{
-    if($plg_wc_roleAccess == 0)
-    {
+if ($gValidLogin) {
+    if ($plg_wc_roleAccess == 0) {
         $plg_wc_access = true;
     }
 
-    if(!$plg_wc_access)
-    {
-        if($plg_wc_roleAccess > 0 && count($plg_wc_roleArray) > 0)
-        {
-            foreach($plg_wc_roleArray as $role)
-            {
-                if(hasRole($role))
-                {
+    if (!$plg_wc_access) {
+        if ($plg_wc_roleAccess > 0 && count($plg_wc_roleArray) > 0) {
+            foreach ($plg_wc_roleArray as $role) {
+                if (hasRole($role)) {
                     $plg_wc_access = true;
                 }
             }
-        }
-        else
-        {
+        } else {
             throw new Exception('No roles defined in your configuration! Please check your parameters in the config.php!');
         }
     }
 }
-if(!$plg_wc_access)
-{
+if (!$plg_wc_access) {
     // Access for defined users only!
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     exit();
 }
 
 // Initialize parameters
-$getHeadline  = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PLG_WC_CREATE_WRITTEN_COMMUNICATIONS')));
-$getActiveRole  = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PLG_WC_CREATE_WRITTEN_COMMUNICATIONS')));
+$getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'bool', array('defaultValue' => true));
 //* Check if own templates are available and set template path
-if(is_dir(ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName() . '/MSWord_Templates'))
-{
+if (is_dir(ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName() . '/MSWord_Templates')) {
     $dir = ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName() . '/MSWord_Templates';
-}
-else
-{
+} else {
     $dir = 'templates';
 }
 
@@ -85,13 +70,10 @@ $selectBoxEntries = array(0 => $gL10n->get('SYS_ACTIVE_MEMBERS'), 1 => $gL10n->g
 $templateSelectionBox = array();
 $folder = opendir($dir);
 $i = 0;
-while($file = readdir($folder))
-{
-    if ($file != "." && $file != "..")
-    {
+while ($file = readdir($folder)) {
+    if ($file != "." && $file != "..") {
         // if docx template available assign to options
-        if(preg_match('/\.docx/', $file))
-        {
+        if (preg_match('/\.docx/', $file)) {
             $templateSelectionBox[$file] = substr($file, 0, -5);
         }
         $i++;
@@ -153,11 +135,12 @@ $form->closeGroupBox();
 $form->openGroupBox('plg_wc_recipient_role', $gL10n->get('SYS_ROLE'));
 // show all roles where the user has the right to see them
 $sql = 'SELECT rol_id, rol_name, cat_name
-          FROM '.TBL_ROLES.'
-    INNER JOIN '.TBL_CATEGORIES.'
+          FROM ' . TBL_ROLES . '
+    INNER JOIN ' . TBL_CATEGORIES . '
             ON cat_id = rol_cat_id
-         WHERE rol_valid   = '.($getActiveRole === true ? 'true' : 'false').'
-           AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+         WHERE rol_valid   = ' . ($getActiveRole === true ? 'true' : 'false') . '
+           AND rol_id IN (' . implode(', ', $gCurrentUser->getRolesViewMemberships()) . ')
+           AND (  cat_org_id  = ' . $gCurrentOrganization->getValue('org_id') . '
                OR cat_org_id IS NULL )
       ORDER BY cat_sequence, rol_name';
 $form->addSelectBoxFromSql('role_select', $gL10n->get('SYS_ROLE'), $gDb, $sql,
@@ -179,10 +162,9 @@ $form->openGroupBox('plg_wc_description', $gL10n->get('SYS_TEXT'));
 $form->addInput('plg_wc_subject', $gL10n->get('SYS_SUBJECT'), '');
 $form->addEditor('plugin_CKEditor', '', '', array('toolbar' => 'AdmidioPlugin_WC'));
 $form->closeGroupBox();
- // add submit button
+// add submit button
 $form->addSubmitButton('btn_send', $gL10n->get('PLG_WC_DOWNLOAD_DOCUMENT'), array('icon' => 'fa-file-download'));
 // add form to html page
 $page->addHtml($form->show());
 // show page
 $page->show();
-?>

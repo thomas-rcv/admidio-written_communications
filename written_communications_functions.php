@@ -30,7 +30,7 @@
  *
  ************************************************************************************/
 
-$rootPath = dirname(dirname(__DIR__));
+$rootPath = dirname(__DIR__, 2);
 $pluginFolder = basename(__DIR__);
 
 require_once($rootPath . '/adm_program/system/common.php');
@@ -42,8 +42,7 @@ require_once(__DIR__ . '/classes/styles.inc');
 require_once($rootPath . '/adm_program/system/bootstrap/logging.php');
 
 // only include config file if it exists
-if (is_file(__DIR__ . '/config.php'))
-{
+if (is_file(__DIR__ . '/config.php')) {
     require_once(__DIR__ . '/config.php');
 }
 
@@ -54,29 +53,25 @@ function assignHtmlColorAttributes($htmlString, $offset = 0)
     global $initial_state;
     // search color information in string and set dynamically in style array
     $pattern = '<span style="color:#';
-    for($i = $offset; $i<strlen($htmlString); $i++)
-    {
-         $pos = strpos($htmlString,$pattern,$i);
-         if($pos !== FALSE)
-         {
-             $offset =  $pos;
-             if($offset >= $i)
-             {
-                 $i = $offset;
-                 preg_match('/<span style="color:(.*?)">/', substr($htmlString, $pos), $output);
-                 // Convert in a class attribute with value of the color.
-                 $htmlString = preg_replace_callback( $output[0],
+    for ($i = $offset; $i < strlen($htmlString); $i++) {
+        $pos = strpos($htmlString, $pattern, $i);
+        if ($pos !== FALSE) {
+            $offset = $pos;
+            if ($offset >= $i) {
+                $i = $offset;
+                preg_match('/<span style="color:(.*?)">/', substr($htmlString, $pos), $output);
+                // Convert in a class attribute with value of the color.
+                $htmlString = preg_replace_callback($output[0],
 
-                                                        function() use ($output)
-                                                        {
-                                                            return 'span class="'.$output[1].'"';
-                                                        },
-                                                        $htmlString);
+                    function () use ($output) {
+                        return 'span class="' . $output[1] . '"';
+                    },
+                    $htmlString);
 
-                 // Define class attribute for color in state array
-                 $initial_state['style_sheet']['classes'][$output[1]] = array('color' => strtoupper(substr($output[1],1)));
-             }
-         }
+                // Define class attribute for color in state array
+                $initial_state['style_sheet']['classes'][$output[1]] = array('color' => strtoupper(substr($output[1], 1)));
+            }
+        }
     }
     return $htmlString;
 }
@@ -92,134 +87,118 @@ function getProfileFieldValue($fieldNameIntern, $userId)
     // read user data
     $user = new User($gDb, $gProfileFields, $userId);
 
-    if($gProfileFields->getProperty($fieldNameIntern, 'usf_type')!= 'RADIO_BUTTON'
-       || $gProfileFields->getProperty($fieldNameIntern, 'usf_type')!= 'DROPDOWN')
-    {
+    if ($gProfileFields->getProperty($fieldNameIntern, 'usf_type') != 'RADIO_BUTTON'
+        || $gProfileFields->getProperty($fieldNameIntern, 'usf_type') != 'DROPDOWN') {
         $htmlString = $user->getValue($fieldNameIntern);
-    }
-    else
-    {
+    } else {
         // Get fieldlist
-        $arrListValues = $gProfileFields->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', 'text');
+        $arrListValues = $gProfileFields->getProperty($fieldNameIntern, 'usf_value_list', 'text');
 
-    	// Get selected user value for profile field
-    	foreach($arrListValues as $key => $valueList)
-    	{
-    	    if($user->getValue($fieldNameIntern, 'database') == $key)
-    	    {
-       	        $htmlString = $valueList;
-    	    }
-    	}
+        // Get selected user value for profile field
+        foreach ($arrListValues as $key => $valueList) {
+            if ($user->getValue($fieldNameIntern, 'database') == $key) {
+                $htmlString = $valueList;
+            }
+        }
     }
     unset ($user);
-	return $htmlString;
+    return $htmlString;
 }
 
 // Check config parameters or define if not exists
-if(!isset($plg_wc_arrCustomProfileFields))
-{
+if (!isset($plg_wc_arrCustomProfileFields)) {
     $plg_wc_arrCustomProfileFields = array();
 }
-if(!isset($plg_wc_arrCustomText))
-{
+if (!isset($plg_wc_arrCustomText)) {
     $plg_wc_arrCustomText = array();
 }
 // Access for users only!
-if($gCurrentUser->getValue('usr_id') == 0)
-{
+if ($gCurrentUser->getValue('usr_id') == 0) {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     exit();
 }
 // Initialize and check the parameter
-$getCommunication           = admFuncVariableIsValid($_POST, 'plugin_CKEditor', 'html', array('defaultValue' => 'no Text'));
-$getRecipientMode           = admFuncVariableIsValid($_POST, 'recipient_mode', 'string', array('defaultValue' => 'Role'));
-$getRecipientOrganization   = admFuncVariableIsValid($_POST, 'plg_wc_recipient_organization', 'string', array('defaultValue' => ''));
-$getRecipientName           = admFuncVariableIsValid($_POST, 'plg_wc_recipient_name', 'string', array('defaultValue' => ''));
-$getRecipientStreet         = admFuncVariableIsValid($_POST, 'plg_wc_recipient_street', 'string', array('defaultValue' => ''));
-$getRecipientPostcode       = admFuncVariableIsValid($_POST, 'plg_wc_recipient_postcode', 'string', array('defaultValue' => ''));
-$getRecipientCity           = admFuncVariableIsValid($_POST, 'plg_wc_recipient_city', 'string', array('defaultValue' => ''));
-$getRoleSelect              = admFuncVariableIsValid($_POST, 'role_select', 'string');
-$getSenderOrganization      = admFuncVariableIsValid($_POST, 'plg_wc_sender_organization', 'string', array('defaultValue' => ''));
-$getSenderName              = admFuncVariableIsValid($_POST, 'plg_wc_sender_name', 'string', array('defaultValue' => ''));
-$getSenderStreet            = admFuncVariableIsValid($_POST, 'plg_wc_sender_street', 'string', array('defaultValue' => ''));
-$getSenderPostcode          = admFuncVariableIsValid($_POST, 'plg_wc_sender_postcode', 'string', array('defaultValue' => ''));
-$getSenderCity              = admFuncVariableIsValid($_POST, 'plg_wc_sender_city', 'string', array('defaultValue' => ''));
-$getShowMembers             = admFuncVariableIsValid($_POST, 'show_members', 'string', array('defaultValue' => ''));
-$getSubject                 = admFuncVariableIsValid($_POST, 'plg_wc_subject', 'string', array('defaultValue' => ''));
-$getTemplate                = admFuncVariableIsValid($_POST, 'plg_wc_template', 'string', array('defaultValue' => ''));
+$getCommunication = admFuncVariableIsValid($_POST, 'plugin_CKEditor', 'html', array('defaultValue' => 'no Text'));
+$getRecipientMode = admFuncVariableIsValid($_POST, 'recipient_mode', 'string', array('defaultValue' => 'Role'));
+$getRecipientOrganization = admFuncVariableIsValid($_POST, 'plg_wc_recipient_organization', 'string', array('defaultValue' => ''));
+$getRecipientName = admFuncVariableIsValid($_POST, 'plg_wc_recipient_name', 'string', array('defaultValue' => ''));
+$getRecipientStreet = admFuncVariableIsValid($_POST, 'plg_wc_recipient_street', 'string', array('defaultValue' => ''));
+$getRecipientPostcode = admFuncVariableIsValid($_POST, 'plg_wc_recipient_postcode', 'string', array('defaultValue' => ''));
+$getRecipientCity = admFuncVariableIsValid($_POST, 'plg_wc_recipient_city', 'string', array('defaultValue' => ''));
+$getRoleSelect = admFuncVariableIsValid($_POST, 'role_select', 'int');
+$getSenderOrganization = admFuncVariableIsValid($_POST, 'plg_wc_sender_organization', 'string', array('defaultValue' => ''));
+$getSenderName = admFuncVariableIsValid($_POST, 'plg_wc_sender_name', 'string', array('defaultValue' => ''));
+$getSenderStreet = admFuncVariableIsValid($_POST, 'plg_wc_sender_street', 'string', array('defaultValue' => ''));
+$getSenderPostcode = admFuncVariableIsValid($_POST, 'plg_wc_sender_postcode', 'string', array('defaultValue' => ''));
+$getSenderCity = admFuncVariableIsValid($_POST, 'plg_wc_sender_city', 'string', array('defaultValue' => ''));
+$getShowMembers = admFuncVariableIsValid($_POST, 'show_members', 'string', array('defaultValue' => ''));
+$getSubject = admFuncVariableIsValid($_POST, 'plg_wc_subject', 'string', array('defaultValue' => ''));
+$getTemplate = admFuncVariableIsValid($_POST, 'plg_wc_template', 'string', array('defaultValue' => ''));
 // Define sender address
-if(isset($_POST['sender_user']))
-{
+if (isset($_POST['sender_user'])) {
     // Get profile fields of current user
-    $arrSender = array( 'Sender_Organization'   => $gCurrentOrganization->getValue('org_longname'),
-                        'Sender_Name'           => $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'),
-                        'Sender_Street'         => $gCurrentUser->getValue('STREET'),
-                        'Sender_Postcode'       => $gCurrentUser->getValue('POSTCODE'),
-                        'Sender_City'           => $gCurrentUser->getValue('CITY'));
-}
-else
-{
-    $arrSender = array( 'Sender_Organization'   => $getSenderOrganization,
-                        'Sender_Name'           => $getSenderName,
-                        'Sender_Street'         => $getSenderStreet,
-                        'Sender_Postcode'       => $getSenderPostcode,
-                        'Sender_City'           => $getSenderCity);
+    $arrSender = array('Sender_Organization' => $gCurrentOrganization->getValue('org_longname'),
+        'Sender_Name' => $gCurrentUser->getValue('FIRST_NAME') . ' ' . $gCurrentUser->getValue('LAST_NAME'),
+        'Sender_Street' => $gCurrentUser->getValue('STREET'),
+        'Sender_Postcode' => $gCurrentUser->getValue('POSTCODE'),
+        'Sender_City' => $gCurrentUser->getValue('CITY'));
+} else {
+    $arrSender = array('Sender_Organization' => $getSenderOrganization,
+        'Sender_Name' => $getSenderName,
+        'Sender_Street' => $getSenderStreet,
+        'Sender_Postcode' => $getSenderPostcode,
+        'Sender_City' => $getSenderCity);
 }
 
 // Define Recipient addresses
-if($getRoleSelect > 0 && $getRecipientMode == 'Role')
-{
+if ($getRoleSelect > 0 && $getRecipientMode == 'Role') {
+    // create file only for visible roles
+    if (!$gCurrentUser->hasRightViewRole($getRoleSelect)) {
+        $gMessage->show($gL10n->get('SYS_ROLE_SELECT_RIGHT', $getRoleSelect));
+        exit();
+    }
+
     $arrMembers = array();
     $members = new RoleMembers($gDb, $getRoleSelect, $getShowMembers);
 
     // add additional profile fields to the role object if defined
-    if(count($plg_wc_arrCustomProfileFields) > 0)
-    {
+    if (count($plg_wc_arrCustomProfileFields) > 0) {
         $members->addProfileFields($plg_wc_arrCustomProfileFields);
     }
 
     $arrMembers = $members->getRoleMembers();
     // Members are assigned to selected role
-    if(count($arrMembers) > 0)
-    {
-        foreach($arrMembers as $memberData)
-        {
-            $arrRecipient[] = array('Recipient_Organization'    => '',
-                                    'Recipient_Name'            => $memberData['first_name'].' '.$memberData['last_name'],
-                                    'Recipient_Street'          => $memberData['street'],
-                                    'Recipient_Postcode'        => $memberData['zip_code'],
-                                    'Recipient_City'            => $memberData['city']);
+    if (count($arrMembers) > 0) {
+        foreach ($arrMembers as $memberData) {
+            $arrRecipient[] = array('Recipient_Organization' => '',
+                'Recipient_Name' => $memberData['first_name'] . ' ' . $memberData['last_name'],
+                'Recipient_Street' => $memberData['street'],
+                'Recipient_Postcode' => $memberData['zip_code'],
+                'Recipient_City' => $memberData['city']);
         }
-    }
-    else
-    {
+    } else {
         $gMessage->show("Diese Rolle hat keine Mitglieder zugeordnet");
         exit();
     }
-}
-else
-{
+} else {
     // no role select. use form values instead
-    $arrRecipient[] = array('Recipient_Organization'   => $getRecipientOrganization,
-                            'Recipient_Name'           => $getRecipientName,
-                            'Recipient_Street'         => $getRecipientStreet,
-                            'Recipient_Postcode'       => $getRecipientPostcode,
-                            'Recipient_City'           => $getRecipientCity);
+    $arrRecipient[] = array('Recipient_Organization' => $getRecipientOrganization,
+        'Recipient_Name' => $getRecipientName,
+        'Recipient_Street' => $getRecipientStreet,
+        'Recipient_Postcode' => $getRecipientPostcode,
+        'Recipient_City' => $getRecipientCity);
 }
 
 // Check if own templates are available and set template path
-if(is_dir(ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName() . '/MSWord_Templates'))
-{
+if (is_dir(ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName() . '/MSWord_Templates')) {
     $templatePath = ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName() . '/MSWord_Templates';
-}
-else
-{
+} else {
     $templatePath = 'templates';
 }
 $gLogger->info('Written Communications: Customer template folder found');
-$gLogger->info('Written Communications: Template path set to :' .$templatePath. '');
+$gLogger->info('Written Communications: Template path set to :' . $templatePath . '');
 // Set path
-$template = $templatePath. '/' .$getTemplate;
+$template = $templatePath . '/' . $getTemplate;
 
 // Get current date
 $objDate = new DateTime(DATE_NOW);
@@ -227,7 +206,7 @@ $objDate->format('Y-m-d');
 
 $dateSystemFormat = $objDate->format($gSettingsManager->getString('system_date'));
 // Define file name
-$filename = $templatePath. '/' .$gL10n->get('PLG_WC_FILENAME').'_'.$dateSystemFormat.'.docx';
+$filename = $templatePath . '/' . $gL10n->get('PLG_WC_FILENAME') . '_' . $dateSystemFormat . '.docx';
 
 // New Word Document:
 $phpwordObject = new PHPWord();
@@ -237,27 +216,27 @@ $section = $phpwordObject->createSection();
 $htmlDom = new simple_html_dom();
 // Provide some initial settings:
 $initial_state = array(
-  // Required parameters:
-  'phpwordObject' => &$phpwordObject, // Must be passed by reference.
-  // Optional parameters - showing the defaults if you don't set anything:
-  'current_style' => array('size' => '11'), // The PHPWord style on the top element - may be inherited by descendent elements.
-  'parents' => array(0 => 'body'), // Our parent is body.
-  'list_depth' => 0, // This is the current depth of any current list.
-  'context' => 'section', // Possible values - section, footer or header.
-  'pseudo_list' => TRUE, // NOTE: Word lists not yet supported (TRUE is the only option at present).
-  'pseudo_list_indicator_font_name' => 'Wingdings', // Bullet indicator font.
-  'pseudo_list_indicator_font_size' => '7', // Bullet indicator size.
-  'pseudo_list_indicator_character' => 'l ', // Gives a circle bullet point with wingdings.
-  'table_allowed' => TRUE, // Note, if you are adding this html into a PHPWord table you should set this to FALSE: tables cannot be nested in PHPWord.
-  'treat_div_as_paragraph' => TRUE, // If set to TRUE, each new div will trigger a new line in the Word document.
-  'style_sheet' => readStyleArray()
-  );
+    // Required parameters:
+    'phpwordObject' => &$phpwordObject, // Must be passed by reference.
+    // Optional parameters - showing the defaults if you don't set anything:
+    'current_style' => array('size' => '11'), // The PHPWord style on the top element - may be inherited by descendent elements.
+    'parents' => array(0 => 'body'), // Our parent is body.
+    'list_depth' => 0, // This is the current depth of any current list.
+    'context' => 'section', // Possible values - section, footer or header.
+    'pseudo_list' => TRUE, // NOTE: Word lists not yet supported (TRUE is the only option at present).
+    'pseudo_list_indicator_font_name' => 'Wingdings', // Bullet indicator font.
+    'pseudo_list_indicator_font_size' => '7', // Bullet indicator size.
+    'pseudo_list_indicator_character' => 'l ', // Gives a circle bullet point with wingdings.
+    'table_allowed' => TRUE, // Note, if you are adding this html into a PHPWord table you should set this to FALSE: tables cannot be nested in PHPWord.
+    'treat_div_as_paragraph' => TRUE, // If set to TRUE, each new div will trigger a new line in the Word document.
+    'style_sheet' => readStyleArray()
+);
 // Convert all used html color attributes to class attributes in HTML string and assign to the initial_state array on the fly
 $htmlString = assignHtmlColorAttributes($getCommunication); // Pass HTML string from CKEditor to do the settings
 // Note, we need to nest the html in a couple of dummy elements.
 $htmlDom->load('<html><body>' . $htmlString . '</body></html>');
 // Create the dom array of elements which we are going to work with:
-$arrHtmlDom = $htmlDom->find('html',0)->children();
+$arrHtmlDom = $htmlDom->find('html', 0)->children();
 // Convert HTML and put it into the PHPWord object
 htmltodocx_insert_html($section, $arrHtmlDom[0]->nodes, $initial_state);
 // Clear HTML dom object:
@@ -266,7 +245,7 @@ unset($htmlDom);
 // read host tmp directory with permission to write files
 $tmpDir = __DIR__ . '/templates/tempdir/';
 // Save HTML from CKEditor as temporary description file
-$tmpFileLocation = @tempnam($tmpDir,'zip');
+$tmpFileLocation = @tempnam($tmpDir, 'zip');
 $objWriter = PHPWord_IOFactory::createWriter($phpwordObject, 'Word2007');
 $objWriter->save($tmpFileLocation);
 // read file as temporary template
@@ -277,20 +256,18 @@ $communicationDocument = $communication->getDocument();
 // Extract Section from XML document
 preg_match('/<w:p>(.*?)<w:sectPr>/s', $communicationDocument, $output);
 // cancel current textrun in main template adding required tags and nesting validated CKEditor string
-$description_output = '</w:t></w:r>'.$output[1].'<w:p><w:r><w:t>';
+$description_output = '</w:t></w:r>' . $output[1] . '<w:p><w:r><w:t>';
 // delete temporary template from HD
 unlink($tmpFileLocation);
 // Load main template
 $document = $phpwordObject->loadTemplate($template);
-$gLogger->info('Written Communications: Template loaded :' .$template. '');
+$gLogger->info('Written Communications: Template loaded :' . $template . '');
 // Count number of Recipients
 $numRecipient = count($arrRecipient);
 // Loop Recipient array and create a new document for each Recipient
 $i = 0;
-foreach($arrRecipient as $Recipient)
-{
-    if($i > 0 && $i < $numRecipient)
-    {
+foreach ($arrRecipient as $Recipient) {
+    if ($i > 0 && $i < $numRecipient) {
         $document->AddPage();
     }
     // Replace parameters
@@ -310,33 +287,28 @@ foreach($arrRecipient as $Recipient)
     $document->setValue('Sender_City', $arrSender['Sender_City']);
     $document->setValue('Subject', $getSubject);
 
-    if($getRoleSelect > 0 && $getRecipientMode == 'Role')
-    // fill additional profile fields registered in config file
-    if(count($plg_wc_arrCustomProfileFields) > 0)
-    {
-        foreach($plg_wc_arrCustomProfileFields as $placeholder => $profilefield)
-        {
-            $document->setValue($placeholder, getProfileFieldValue($profilefield, $arrMembers[$i]['usr_id']));
+    if ($getRoleSelect > 0 && $getRecipientMode == 'Role')
+        // fill additional profile fields registered in config file
+        if (count($plg_wc_arrCustomProfileFields) > 0) {
+            foreach ($plg_wc_arrCustomProfileFields as $placeholder => $profilefield) {
+                $document->setValue($placeholder, getProfileFieldValue($profilefield, $arrMembers[$i]['usr_id']));
+            }
         }
-    }
     // fill defined text fields
-    if(count($plg_wc_arrCustomText) > 0)
-    {
-        foreach($plg_wc_arrCustomText as $placeholder => $text)
-        {
+    if (count($plg_wc_arrCustomText) > 0) {
+        foreach ($plg_wc_arrCustomText as $placeholder => $text) {
             $document->setValue($placeholder, $text);
         }
     }
     // next Recipient
-    $i ++;
+    $i++;
 }
 
 // Output document
 $document->save($filename);
 // Open download dialog and delete file from disc after download
-header('Content-disposition: attachment; filename='.$filename.'');
+header('Content-disposition: attachment; filename=' . $filename . '');
 header('Content-type: application/docx');
 readfile($filename);
 unlink($filename);
 exit();
-?>
