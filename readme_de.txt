@@ -1,11 +1,11 @@
 /*************************************************************************************
  * Plugin Written communications documentation
  *
- * Copyright    : (c) 2004-2021 The Admidio Team
+ * Copyright    : (c) The Admidio Team
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- * Version      : 3.3.2
+ * Version      : 3.4.2
  *
  ************************************************************************************/
 
@@ -19,7 +19,7 @@
  1. Systemanforderungen
  ----------------------
 
- - Admidio Version 2.4.4 oder höher
+ - Admidio Version 4.2 oder höher
 
 
 

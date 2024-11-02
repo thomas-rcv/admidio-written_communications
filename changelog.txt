@@ -1,7 +1,7 @@
 /*************************************************************************************
  * Plugin Written communications documentation
  *
- * Copyright    : (c) 2004-2021 The Admidio Team
+ * Copyright    : (c) The Admidio Team
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -50,3 +50,9 @@ Changelog
                             - Update SimpleHtmlDom library to version 1.9.1
 
 24.01.2021  Release 3.3.3:  - [Bug] Output of street was not possible because of a rename of the internal field name
+
+05.12.2021  Release 3.4.0:  - [Change] Compatibility with Admidio 4.1
+
+13.01.2024  Release 3.4.1:  - [Change] Compatibility with Admidio 4.3
+
+02.11.2024  Release 3.4.2:  - [Bug] Only show roles where the user has the right to view the membership
