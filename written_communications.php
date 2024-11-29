@@ -163,7 +163,7 @@ $form->addInput('plg_wc_subject', $gL10n->get('SYS_SUBJECT'), '');
 $form->addEditor('plugin_CKEditor', '', '', array('toolbar' => 'AdmidioPlugin_WC'));
 $form->closeGroupBox();
 // add submit button
-$form->addSubmitButton('btn_send', $gL10n->get('PLG_WC_DOWNLOAD_DOCUMENT'), array('icon' => 'fa-file-download'));
+$form->addSubmitButton('adm_button_send', $gL10n->get('PLG_WC_DOWNLOAD_DOCUMENT'), array('icon' => 'fa-file-download'));
 // add form to html page
 $page->addHtml($form->show());
 // show page
