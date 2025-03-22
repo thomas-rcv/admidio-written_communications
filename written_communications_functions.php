@@ -30,6 +30,9 @@
  *
  ************************************************************************************/
 
+use Admidio\Documents\Entity\Folder;
+use Admidio\Users\Entity\User;
+
 $rootPath = dirname(__DIR__, 2);
 $pluginFolder = basename(__DIR__);
 
@@ -190,8 +193,8 @@ if ($getRoleSelect > 0 && $getRecipientMode == 'Role') {
 }
 
 // Check if own templates are available and set template path
-if (is_dir(ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName() . '/MSWord_Templates')) {
-    $templatePath = ADMIDIO_PATH . FOLDER_DATA . '/' . TableFolder::getRootFolderName() . '/MSWord_Templates';
+if (is_dir(ADMIDIO_PATH . FOLDER_DATA . '/' . Folder::getRootFolderName() . '/MSWord_Templates')) {
+    $templatePath = ADMIDIO_PATH . FOLDER_DATA . '/' . Folder::getRootFolderName() . '/MSWord_Templates';
 } else {
     $templatePath = 'templates';
 }
