@@ -5,13 +5,14 @@
  * Homepage     : http://www.admidio.org
  * Author       : Thomas-RCV
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- * Version      : 3.4.2
- * Required     : Admidio Version 4.3
+ * Version      : 4.0.0
+ * Required     : Admidio Version 5.0
  *
  *****************************************************************************/
 
 use Admidio\Documents\Entity\Folder;
 use Admidio\Infrastructure\Exception;
+use Admidio\UI\Presenter\FormPresenter;
 use Admidio\UI\Presenter\PagePresenter;
 
 $rootPath = dirname(__DIR__, 2);
@@ -86,6 +87,7 @@ try {
     closedir($folder);
     // create html page object
     $page = PagePresenter::withHtmlIDAndHeadline('adm_plugin_written_communication', $getHeadline);
+    $page->addTemplateFolder(ADMIDIO_PATH . FOLDER_PLUGINS . '/' . $pluginFolder . '/smarty');
 
     // Javascript for select boxes
     $page->addJavascript('
@@ -117,27 +119,19 @@ try {
     // Navigation starts here
     $gNavigation->addUrl(CURRENT_URL, $getHeadline);
     // show form
-    $form = new HtmlForm('plg_wc_form', 'written_communications_functions.php', $page);
+    $form = new FormPresenter('plg_wc_form', 'plugin.written-communication.edit.tpl', 'written_communications_functions.php', $page);
 
-    $form->openGroupBox('plg_wc_template_choice', $gL10n->get('PLG_WC_CHOOSE_TEMPLATE'));
     $form->addSelectBox('plg_wc_template', $gL10n->get('PLG_WC_CHOOSE_TEMPLATE'), $templateSelectionBox, array('property' => HtmlForm::FIELD_REQUIRED));
-    $form->closeGroupBox();
-
-    $form->openGroupBox('plg_wc_selection', $gL10n->get('PLG_WC_SELECTION'));
     $form->addCheckbox('sender_user', $gL10n->get('PLG_WC_ADDRESS_USER'), 1);
     $form->addCheckbox('recipient_mode', $gL10n->get('PLG_WC_INDIVIDUAL_RECIPIENT'));
-    $form->closeGroupBox();
 
-    $form->openGroupBox('plg_wc_sender_manual', $gL10n->get('SYS_SENDER'));
     $form->addInput('plg_wc_sender_organization', $gL10n->get('SYS_ORGANIZATION'), '');
     $form->addInput('plg_wc_sender_name', $gL10n->get('SYS_NAME'), '');
     $form->addInput('plg_wc_sender_street', $gL10n->get('SYS_STREET'), '');
     $form->addInput('plg_wc_sender_postcode', $gL10n->get('SYS_POSTCODE'), '');
     $form->addInput('plg_wc_sender_city', $gL10n->get('SYS_CITY'), '');
-    $form->closeGroupBox();
 
-    $form->openGroupBox('plg_wc_recipient_role', $gL10n->get('SYS_ROLE'));
-// show all roles where the user has the right to see them
+    // show all roles where the user has the right to see them
     $sql = 'SELECT rol_id, rol_name, cat_name
           FROM ' . TBL_ROLES . '
     INNER JOIN ' . TBL_CATEGORIES . '
@@ -148,29 +142,26 @@ try {
                OR cat_org_id IS NULL )
       ORDER BY cat_sequence, rol_name';
     $form->addSelectBoxFromSql('role_select', $gL10n->get('SYS_ROLE'), $gDb, $sql,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => 0, 'multiselect' => false));
+        array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => 0, 'multiselect' => false));
     $showMembersSelection = array($gL10n->get('SYS_ACTIVE_MEMBERS'), $gL10n->get('SYS_FORMER_MEMBERS'), $gL10n->get('SYS_ACTIVE_FORMER_MEMBERS'));
     $form->addSelectBox('show_members', $gL10n->get('SYS_CONFIGURATION'), $showMembersSelection,
-        array('property' => HtmlForm::FIELD_REQUIRED, 'defaultValue' => $selectBoxEntries, 'showContextDependentFirstEntry' => false));
-    $form->closeGroupBox();
+        array('property' => FormPresenter::FIELD_REQUIRED, 'defaultValue' => $selectBoxEntries, 'showContextDependentFirstEntry' => false));
 
-    $form->openGroupBox('plg_wc_recipient_manual', $gL10n->get('SYS_RECIPIENT'));
     $form->addInput('plg_wc_recipient_organization', $gL10n->get('SYS_ORGANIZATION'), '');
     $form->addInput('plg_wc_recipient_name', $gL10n->get('SYS_NAME'), '');
     $form->addInput('plg_wc_recipient_street', $gL10n->get('SYS_STREET'), '');
     $form->addInput('plg_wc_recipient_postcode', $gL10n->get('SYS_POSTCODE'), '');
     $form->addInput('plg_wc_recipient_city', $gL10n->get('SYS_CITY'), '');
-    $form->closeGroupBox();
-// add editor for message
-    $form->openGroupBox('plg_wc_description', $gL10n->get('SYS_TEXT'));
+
+    // add editor for message
     $form->addInput('plg_wc_subject', $gL10n->get('SYS_SUBJECT'), '');
-    $form->addEditor('plugin_CKEditor', '', '', array('toolbar' => 'AdmidioPlugin_WC'));
-    $form->closeGroupBox();
-// add submit button
+    $form->addEditor('plugin_CKEditor', '', '', array('toolbar' => 'AdmidioNoMedia'));
+
     $form->addSubmitButton('adm_button_send', $gL10n->get('PLG_WC_DOWNLOAD_DOCUMENT'), array('icon' => 'fa-file-download'));
-// add form to html page
-    $page->addHtml($form->show());
-// show page
+
+    $form->addToHtmlPage(false);
+    $gCurrentSession->addFormObject($form);
+
     $page->show();
 } catch (Exception $e) {
     $gMessage->show($e->getMessage());
