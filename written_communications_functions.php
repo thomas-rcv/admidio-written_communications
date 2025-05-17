@@ -37,15 +37,14 @@ use Admidio\Users\Entity\User;
 $rootPath = dirname(__DIR__, 2);
 $pluginFolder = basename(__DIR__);
 
-require_once($rootPath . '/adm_program/system/common.php');
+require_once($rootPath . '/system/common.php');
 require_once(__DIR__ . '/classes/PHPWord.php');
 require_once(__DIR__ . '/classes/simplehtmldom/simple_html_dom.php');
 require_once(__DIR__ . '/classes/htmltodocx_converter/h2d_htmlconverter.php');
 require_once(__DIR__ . '/classes/adm_RoleMembers.php');
 require_once(__DIR__ . '/classes/styles.inc');
-require_once($rootPath . '/adm_program/system/bootstrap/logging.php');
 
-// only include config file if it exists
+// only include a config file if it exists
 if (is_file(__DIR__ . '/config.php')) {
     require_once(__DIR__ . '/config.php');
 }

@@ -18,8 +18,8 @@ use Admidio\UI\Presenter\PagePresenter;
 $rootPath = dirname(__DIR__, 2);
 $pluginFolder = basename(__DIR__);
 
-require_once($rootPath . '/adm_program/system/common.php');
-require_once($rootPath . '/adm_program/system/login_valid.php');
+require_once($rootPath . '/system/common.php');
+require_once(ADMIDIO_PATH . FOLDER_SYSTEM . '/login_valid.php');
 
 try {
     // only include config file if it exists
