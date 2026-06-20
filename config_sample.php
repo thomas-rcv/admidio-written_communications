@@ -43,4 +43,10 @@ $plg_wc_arrCustomProfileFields = array('UserEmail' => 'EMAIL');
 $plg_wc_arrCustomText = array(  'Text_de' => 'Dieser Textknoten wurde in der config.php des Plugin im Array $plg_wc_arrCustomProfileFields" erstellt und ersetzt den Platzhalter "${Text_de}" im Template.',
                                 'Text_en' => 'This text is defined in the config.php of the plugin. It replaces the placeholder "${Text_en}" defined in the array "$plg_wc_arrCustomProfileFields".');
 
+//
+// If this variable is defined, the serial letter will be sorted according to a numerical field in the profile data of the role members. Otherwise, sorting is done by name and first name.
+// A sortable profile field with this name must exist.
+//
+// $plg_wc_printingSequenceFieldName = 'Druckreihenfolge';
+
 ?>

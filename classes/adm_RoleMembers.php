@@ -54,6 +54,7 @@ class RoleMembers
     public  $db;                        ///< Database object to handle the communication with the database. This must be public because of session handling.
     private $limit;                     ///< Limit of the query result
     private $memberCondition;           ///< Internal member condition
+    private $memberOrderBy;             ///< Ordering sequence for retrieval of role members
     private $roleId;                    ///< Requested role ID
     private $showMembers;               ///< Paramter to handle member status of the query ( default "0" for active members of the role )
     private $sqlConditions;             ///< Internal SQL condition statement for the query
@@ -75,6 +76,7 @@ class RoleMembers
     public function __construct(&$db, $rol_id = 0, $showMembers = 0)
     {
         global $gCurrentOrganization;
+        global $plg_wc_printingSequenceFieldName;
 
         $this->additionalProfileFields  = '';
         $this->additionalSQLJoin        = '';
@@ -110,6 +112,12 @@ class RoleMembers
                                         AND rol_cat_id = cat_id
                                         AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                                             OR cat_org_id IS NULL )) ';
+
+        if ($plg_wc_printingSequenceFieldName) {
+            $this->memberOrderBy = 'CAST ('.$plg_wc_printingSequenceFieldName.' AS INT)';
+        } else {
+            $this->memberOrderBy = 'last_name, first_name';
+        }
     }
 
     /**
@@ -188,7 +196,7 @@ class RoleMembers
                   ON mem.mem_rol_id  = rol.rol_id '. $this->sqlConditions .'
                  AND mem.mem_usr_id  = usr_id
                 WHERE '. $this->memberCondition. '
-                ORDER BY last_name, first_name '.$this->limit;
+                ORDER BY '.$this->memberOrderBy.' '.$this->limit;
 
         $resultUser = $this->db->query($sql);
         while($row = $resultUser->fetch())

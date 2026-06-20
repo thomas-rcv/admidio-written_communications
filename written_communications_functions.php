@@ -116,6 +116,10 @@ try {
     if (!isset($plg_wc_arrCustomText)) {
         $plg_wc_arrCustomText = array();
     }
+    if (!isset($plg_wc_printingSequenceFieldName))
+    {
+        $plg_wc_printingSequenceFieldName = null;
+    }
     // Access for users only!
     if ($gCurrentUser->getValue('usr_id') == 0) {
         throw new Exception('SYS_NO_RIGHTS');
@@ -166,6 +170,11 @@ try {
         // add additional profile fields to the role object if defined
         if (count($plg_wc_arrCustomProfileFields) > 0) {
             $members->addProfileFields($plg_wc_arrCustomProfileFields);
+        }
+        // add profile field for sorting order if it is defined
+        if ($plg_wc_printingSequenceFieldName) {
+            $members->addProfileFields(array('PrintSequence' => strtoupper($plg_wc_printingSequenceFieldName)));
+            error_log('Adding sort field');
         }
 
         $arrMembers = $members->getRoleMembers();
